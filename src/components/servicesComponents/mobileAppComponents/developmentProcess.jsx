@@ -98,12 +98,7 @@ const DevelopmentProcess = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="bg-white font-jakarta relative">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-green/5 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/3" />
-      </div>
-
+    <section className="bg-white w-full font-jakarta relative">
       <div className="pt-24 pb-12 md:py-32 px-6 lg:px-12 w-full mx-auto text-center relative z-10">
         <div className="flex flex-col items-center gap-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F8FAFC] border border-gray-100 shadow-sm">
@@ -112,7 +107,7 @@ const DevelopmentProcess = () => {
               Our Process
             </span>
           </div>
-          <h2 className="text-[36px] sm:text-[46px] lg:text-[54px] font-extrabold text-navy tracking-tight max-w-[800px] leading-tight">
+          <h2 className="text-[36px] sm:text-[46px] lg:text-[50px] font-extrabold text-navy tracking-tight max-w-[800px] leading-tight">
             Our Mobile App{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green to-blue-600">
               Development Process

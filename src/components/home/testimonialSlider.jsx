@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Dialog,
   DialogContent,
@@ -9,9 +10,7 @@ import {
 import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 
 export default function TestimonialSlider() {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const testimonials = [
+  const baseTestimonials = [
     {
       name: "Ayesha Raza",
       role: "Founder, PeaceFlow",
@@ -55,17 +54,64 @@ export default function TestimonialSlider() {
     },
   ];
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % testimonials.length);
-  };
+  // Duplicate to ensure smooth 4-item infinite looping
+  const testimonials = [
+    ...baseTestimonials,
+    ...baseTestimonials,
+    ...baseTestimonials,
+  ];
 
-  const handlePrev = () => {
-    setActiveIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
-    );
-  };
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "start",
+    slidesToScroll: 1,
+  });
 
-  const currentTestimonial = testimonials[activeIndex];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const scrollTo = useCallback(
+    (index) => {
+      if (emblaApi) emblaApi.scrollTo(index);
+    },
+    [emblaApi],
+  );
+
+  const onInit = useCallback((emblaApi) => {
+    setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi, setSelectedIndex]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onInit(emblaApi);
+    onSelect();
+    emblaApi.on("reInit", onInit);
+    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect);
+  }, [emblaApi, onInit, onSelect]);
+
+  // Autoplay functionality
+  useEffect(() => {
+    if (!emblaApi || isPaused) return;
+    const autoplay = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 3500);
+    return () => clearInterval(autoplay);
+  }, [emblaApi, isPaused]);
 
   const highlightSoftmind = (text) => {
     if (!text) return text;
@@ -90,7 +136,7 @@ export default function TestimonialSlider() {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill={i < rating ? "#0CBF83" : "#334155"}
-            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0"
           >
             <path
               fillRule="evenodd"
@@ -127,7 +173,7 @@ export default function TestimonialSlider() {
 
   return (
     <section className="relative w-full bg-[#070E13] py-16 md:py-20 lg:py-24 overflow-hidden font-sans flex justify-center items-center">
-      <div className="w-full px-4 sm:px-6 flex flex-col items-center">
+      <div className="w-full px-4 sm:px-6 md:px-10 max-w-[1600px] flex flex-col items-center">
         {/* Header Label & Title */}
         <div className="flex flex-col items-center gap-3.5 text-center mb-12 md:mb-16">
           <div className="flex items-center gap-2">
@@ -144,98 +190,113 @@ export default function TestimonialSlider() {
           </h2>
         </div>
 
-        {/* Card Container */}
-        <div className="bg-[#0D1815] border border-[#132A22] rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-10 w-full max-w-xl mx-auto shadow-2xl relative">
-          <div className="flex items-center gap-4 mb-5 md:mb-6">
-            {/* Avatar Circle */}
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#0CBF83] flex items-center justify-center text-[#070D12] font-bold text-lg md:text-xl tracking-wider shrink-0">
-              {currentTestimonial.initials}
-            </div>
-            <div>
-              <h3 className="text-white font-bold text-base md:text-lg">
-                {currentTestimonial.name}
-              </h3>
-              <p className="text-[#64748B] text-xs sm:text-sm mt-0.5">
-                {currentTestimonial.role}
-              </p>
-            </div>
-          </div>
+        {/* Embla Carousel Container */}
+        <div
+          className="overflow-hidden w-full"
+          ref={emblaRef}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="flex -ml-4 md:-ml-6 cursor-grab active:cursor-grabbing">
+            {testimonials.map((testimonial, idx) => (
+              <div
+                className="flex-[0_0_100%] sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0 pl-4 md:pl-6 flex"
+                key={idx}
+              >
+                {/* Card */}
+                <div className="bg-[#0D1815] border border-[#132A22] rounded-2xl p-5 md:p-6 w-full h-full shadow-2xl relative flex flex-col transition-all duration-300 hover:border-[#0CBF83]/30 hover:shadow-[0_0_20px_rgba(12,191,131,0.15)] group select-none">
+                  {/* Avatar & Info */}
+                  <div className="flex items-center gap-3 mb-4 md:mb-5">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#0CBF83] flex items-center justify-center text-[#070D12] font-bold text-base md:text-lg tracking-wider shrink-0">
+                      {testimonial.initials}
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-sm md:text-base">
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-[#64748B] text-[11px] sm:text-xs mt-0.5">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
 
-          <div className="mb-5 md:mb-6">
-            {renderCardStars(currentTestimonial.rating)}
-          </div>
+                  {/* Stars */}
+                  <div className="mb-4 md:mb-5">
+                    {renderCardStars(testimonial.rating)}
+                  </div>
 
-          <p className="text-gray-300 leading-relaxed mb-5 md:mb-6 font-medium text-[14px] sm:text-[15px]">
-            {highlightSoftmind(currentTestimonial.shortFeedback)}
-          </p>
+                  {/* Short Feedback */}
+                  <p className="text-gray-300 leading-relaxed mb-5 md:mb-6 font-medium text-[13px] sm:text-[14px] flex-grow select-text">
+                    {highlightSoftmind(testimonial.shortFeedback)}
+                  </p>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <button className="text-green font-bold text-[14px] sm:text-[15px] hover:text-[#10e69d] transition-colors focus:outline-none cursor-pointer hover:underline">
-                Click to view full review
-              </button>
-            </DialogTrigger>
+                  {/* Modal Trigger & Content */}
+                  <Dialog>
+                    <DialogTrigger className="text-green font-bold text-[13px] sm:text-[14px] hover:text-[#10e69d] transition-colors focus:outline-none cursor-pointer hover:underline self-start text-left mt-auto">
+                      Click to view full review
+                    </DialogTrigger>
 
-            <DialogContent
-              className="bg-[#0A131F] text-white border-0 px-7 py-4 w-[95vw] sm:w-[90vw] sm:max-w-[850px] max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl md:rounded-[32px] shadow-[0_0_40px_rgba(0,120,255,0.2),_0_0_40px_rgba(0,229,255,0.2)] md:shadow-[0_0_60px_rgba(0,120,255,0.25),_0_0_60px_rgba(0,229,255,0.25)] font-sans antialiased"
-              style={{
-                backgroundImage:
-                  "linear-gradient(#0A131F, #0A131F), linear-gradient(135deg, rgba(0,75,192,1), rgba(0,229,255,1))",
-                backgroundOrigin: "border-box",
-                backgroundClip: "padding-box, border-box",
-                border: "2px solid transparent",
-              }}
-            >
-              <DialogTitle className="sr-only">
-                Full Review from {currentTestimonial.name}
-              </DialogTitle>
+                    <DialogContent
+                      className="bg-[#0A131F] text-white border-0 px-7 py-4 w-[95vw] sm:w-[90vw] sm:max-w-[850px] max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-2xl md:rounded-[32px] shadow-[0_0_40px_rgba(0,120,255,0.2),_0_0_40px_rgba(0,229,255,0.2)] md:shadow-[0_0_60px_rgba(0,120,255,0.25),_0_0_60px_rgba(0,229,255,0.25)] font-sans antialiased"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(#0A131F, #0A131F), linear-gradient(135deg, rgba(0,75,192,1), rgba(0,229,255,1))",
+                        backgroundOrigin: "border-box",
+                        backgroundClip: "padding-box, border-box",
+                        border: "2px solid transparent",
+                      }}
+                    >
+                      <DialogTitle className="sr-only">
+                        Full Review from {testimonial.name}
+                      </DialogTitle>
 
-              <div className="flex flex-col relative z-10 w-full pt-2">
-                {/* Header: Client Name at the very top */}
-                <h2 className="text-[#0CBF83] text-xl md:text-[22px] font-medium mb-3 tracking-wide">
-                  {currentTestimonial.name}
-                </h2>
+                      <div className="flex flex-col relative z-10 w-full pt-2">
+                        {/* Header: Client Name at the very top */}
+                        <h2 className="text-green text-xl md:text-[22px] font-medium mb-3 tracking-wide select-text">
+                          {testimonial.name}
+                        </h2>
 
-                {/* Rating, Date, Share */}
-                <div className="flex flex-wrap items-center gap-3 md:gap-4 text-gray-400 text-[13px] md:text-[15px] mb-8 font-medium">
-                  {renderModalStars(currentTestimonial.rating)}
-                  <span className="font-bold text-white -ml-1">
-                    {currentTestimonial.rating.toFixed(1)}
-                  </span>
-                  <span className="text-gray-100">|</span>
-                  <span>{currentTestimonial.date}</span>
-                  {/* <div className="w-7 h-7 md:w-8 md:h-8 rounded-full border-[1.5px] border-[#0CBF83] flex items-center justify-center text-[#0CBF83] ml-1 md:ml-2">
-                    <Share2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  </div> */}
-                </div>
+                        {/* Rating, Date, Share */}
+                        <div className="flex flex-wrap items-center gap-3 md:gap-4 text-gray-300 text-[13px] md:text-[15px] mb-8 font-medium select-text">
+                          {renderModalStars(testimonial.rating)}
+                          <span className="font-bold text-white -ml-1">
+                            {testimonial.rating.toFixed(1)}
+                          </span>
+                          <span className="text-gray-100">|</span>
+                          <span>{testimonial.date}</span>
+                        </div>
 
-                {/* Full Review Content */}
-                <div className="text-gray-300 font-light italic text-[14.5px] sm:text-[15px] md:text-[16px] leading-[1.7] md:leading-[1.8] space-y-4 md:space-y-5 tracking-wide">
-                  {currentTestimonial.fullFeedback.map((para, i) => (
-                    <p key={i}>{highlightSoftmind(para)}</p>
-                  ))}
+                        {/* Full Review Content */}
+                        <div className="text-white/85 font-light italic text-[14.5px] sm:text-[15px] md:text-[16px] leading-[1.7] md:leading-[1.8] space-y-4 md:space-y-5 tracking-wide select-text">
+                          {testimonial.fullFeedback.map((para, i) => (
+                            <p key={i}>{highlightSoftmind(para)}</p>
+                          ))}
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
+            ))}
+          </div>
         </div>
 
         {/* Navigation Controls */}
-        <div className="flex items-center justify-center gap-4 sm:gap-6 mt-8 md:mt-10">
+        <div className="flex items-center justify-center gap-4 sm:gap-6 mt-10 md:mt-12">
           <button
-            onClick={handlePrev}
+            onClick={scrollPrev}
             className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-[#1A2E35] flex items-center justify-center text-gray-400 hover:text-white hover:border-[#0CBF83] hover:bg-[#0CBF83]/10 transition-all bg-transparent focus:outline-none shrink-0"
           >
             <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
           </button>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {testimonials.map((_, idx) => (
+            {scrollSnaps.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => setActiveIndex(idx)}
+                onClick={() => scrollTo(idx)}
                 className={`transition-all duration-300 rounded-full focus:outline-none ${
-                  activeIndex === idx
+                  selectedIndex === idx
                     ? "w-5 h-1.5 sm:w-6 sm:h-2 bg-[#0CBF83]"
                     : "w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#334155] hover:bg-[#475569]"
                 }`}
@@ -245,7 +306,7 @@ export default function TestimonialSlider() {
           </div>
 
           <button
-            onClick={handleNext}
+            onClick={scrollNext}
             className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-[#1A2E35] flex items-center justify-center text-gray-400 hover:text-white hover:border-[#0CBF83] hover:bg-[#0CBF83]/10 transition-all bg-transparent focus:outline-none shrink-0"
           >
             <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />

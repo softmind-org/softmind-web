@@ -43,27 +43,27 @@ const SERVICES_MEGA_MENU = [
       {
         label: "AI SaaS Development",
         // desc: "Build intelligent, scalable and secure AI-powered SaaS products.",
-        href: "/services/ai-saas",
+        href: "/services/ai-saas-development",
       },
       {
         label: "Custom Software Development",
         // desc: "End-to-end custom software solutions tailored to your business needs.",
-        href: "/services/custom-software",
+        href: "/services/custom-software-development",
       },
       {
         label: "Mobile App Development",
         // desc: "High-performance mobile apps for iOS and Android platforms.",
-        href: "/services/mobile-app",
+        href: "/services/mobile-app-development",
       },
       {
         label: "Web Application Development",
         // desc: "Modern, responsive and scalable web applications.",
-        href: "/services/web-app",
+        href: "/services/web-app-development",
       },
       {
         label: "MVP Development",
         // desc: "Validate your idea quickly with a lean and powerful MVP.",
-        href: "/services/mvp",
+        href: "/services/mvp-development",
       },
       {
         label: "Offshore Software Testing",
@@ -104,7 +104,7 @@ const SERVICES_MEGA_MENU = [
       {
         label: "Dedicated Development Teams",
         // desc: "Hire dedicated developers to build your product like their own.",
-        href: "/services/dedicated-teams",
+        href: "/services/dedicated-development-teams",
       },
       {
         label: "Staff Augmentation",

@@ -3,14 +3,14 @@
 import React, { useEffect, useRef } from "react";
 import { motion, useInView, animate } from "framer-motion";
 
-const CountUp = ({ 
-  from = 0, 
-  to, 
-  duration = 2, 
-  decimals = 0, 
-  prefix = "", 
-  suffix = "", 
-  text = null 
+const CountUp = ({
+  from = 0,
+  to,
+  duration = 2,
+  decimals = 0,
+  prefix = "",
+  suffix = "",
+  text = null,
 }) => {
   const nodeRef = useRef(null);
   const isInView = useInView(nodeRef, { once: true, margin: "-50px" });
@@ -83,7 +83,7 @@ const itemVariants = {
 
 export default function StatsBanner() {
   return (
-    <section className="relative w-full py-16 bg-[#ffffff] font-jakarta flex justify-center">
+    <section className="relative w-full py-16 bg-gray-200 font-jakarta flex justify-center">
       <div className="relative w-full px-6 sm:px-12">
         {/* Banner Container */}
         <motion.div
@@ -99,17 +99,17 @@ export default function StatsBanner() {
           {statsData.map((stat, index) => (
             <React.Fragment key={index}>
               {/* Stat Item */}
-              <motion.div 
-                variants={itemVariants} 
+              <motion.div
+                variants={itemVariants}
                 className="relative z-10 flex flex-col items-center text-center w-full lg:w-1/4"
               >
                 <span className="font-bold text-[36px] sm:text-[42px] leading-tight text-white mb-1">
-                  <CountUp 
-                    to={stat.to} 
-                    text={stat.text} 
-                    prefix={stat.prefix} 
-                    suffix={stat.suffix} 
-                    decimals={stat.decimals} 
+                  <CountUp
+                    to={stat.to}
+                    text={stat.text}
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                    decimals={stat.decimals}
                   />
                 </span>
                 <span className="font-bold text-[14px] sm:text-[16px] leading-snug text-white tracking-wide">
@@ -120,13 +120,13 @@ export default function StatsBanner() {
               {/* Divider (Render for all except the last item) */}
               {index < statsData.length - 1 && (
                 <>
-                  <motion.div 
-                    variants={itemVariants} 
-                    className="hidden lg:block relative z-10 w-[2px] h-[80px] bg-white/20 rounded-full" 
+                  <motion.div
+                    variants={itemVariants}
+                    className="hidden lg:block relative z-10 w-[2px] h-[80px] bg-white/20 rounded-full"
                   />
-                  <motion.div 
-                    variants={itemVariants} 
-                    className="lg:hidden relative z-10 w-full h-[1px] bg-white/20 rounded-full" 
+                  <motion.div
+                    variants={itemVariants}
+                    className="lg:hidden relative z-10 w-full h-[1px] bg-white/20 rounded-full"
                   />
                 </>
               )}

@@ -9,27 +9,32 @@ import {
   MariyumHR,
 } from "../../../public/images";
 import Image from "next/image";
+import { FaLinkedin, FaLinkedinIn } from "react-icons/fa";
 
 const leaders = [
   {
     role: "Founder & CEO",
     name: "Muhammad Bilal Bhatti",
     image: CeoBilal,
+    linkedin: "https://www.linkedin.com/in/bilalbhatti139/",
   },
   {
     role: "Co-Founder",
     name: "Amna Akbar",
     image: MariyumHR,
+    linkedin: "https://www.linkedin.com/in/amna-akbar-a07576348/",
   },
   {
     role: "Head of Technology & Solutions",
     name: "Fahad Anwar",
     image: FahadAnwar2,
+    linkedin: "https://www.linkedin.com/in/fahad-anwar-2989661ab/",
   },
   {
     role: "Project Director",
     name: "Bilal El Azimani",
     image: BilalElAzimani,
+    linkedin: "https://www.linkedin.com/in/bilal-el-azimani-238724176/",
   },
 ];
 
@@ -68,7 +73,7 @@ export default function OurLeadership() {
         {/* Header Section */}
         <div className="flex flex-col items-center text-center gap-4 mb-16 max-w-160">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-navy to-[#004BC0]" />
+            <span className="w-2 h-2 rounded-full bg-linear-to-r from-navy to-[#004BC0]" />
             <span className="text-[16px] sm:text-[18px] font-bold text-green tracking-wide">
               Our Leadership
             </span>
@@ -82,34 +87,58 @@ export default function OurLeadership() {
           </p>
         </div>
 
-        {/* Desktop Grid Layout */}
-        <div className="hidden max-w-7xl lg:grid grid-cols-4 gap-6 w-full">
+        {/* Desktop & Tablet Grid Layout */}
+        <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full max-w-7xl">
           {leaders.map((leader, idx) => (
             <div
               key={idx}
-              className="w-full bg-white border border-[#EFEFEF] rounded-xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.06)] flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(0,0,0,0.12)]"
+              className="group bg-white rounded-[20px] p-3 sm:p-3.5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 border border-gray-100 flex flex-col h-full group cursor-pointer"
             >
-              <Image
-                className="rounded-lg mb-5 h-87.5 w-full object-cover object-top"
-                src={leader.image}
-                alt="Our Leaders"
-              />
-              <div className="flex flex-col gap-0.5 px-1">
-                <h3 className="text-[15px] font-bold text-dark tracking-wide">
-                  {leader.role}
-                </h3>
-                <p className="text-[14px] font-medium text-grey tracking-wide">
-                  {leader.name}
-                </p>
+              {/* Image Container */}
+              <a
+                href={leader.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block w-full aspect-4/5 rounded-xl overflow-hidden mb-5 bg-gray-50 shrink-0"
+                aria-label={`LinkedIn profile of ${leader.name}`}
+              >
+                <Image
+                  src={leader.image}
+                  alt={leader.name}
+                  fill
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                />
+              </a>
+
+              {/* Text & Icon */}
+              <div className="flex items-start justify-between">
+                <div className="flex flex-col gap-1 pr-3">
+                  <h3 className="text-[17px] font-bold text-[#111827] leading-tight tracking-wide">
+                    {leader.name}
+                  </h3>
+                  <p className="text-[14px] font-semibold whitespace-nowrap text-green">
+                    {leader.role}
+                  </p>
+                </div>
+
+                <a
+                  href={leader.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-[#0077b5] group-hover:border-[#0077b5] group-hover:text-white transition-all duration-300 shadow-sm"
+                  aria-label={`LinkedIn profile of ${leader.name}`}
+                >
+                  <FaLinkedinIn size={18} />
+                </a>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Mobile / Tablet Slider Layout */}
-        <div className="lg:hidden w-full flex flex-col items-center">
+        {/* Mobile Slider Layout */}
+        <div className="sm:hidden w-full flex flex-col items-center">
           <div
-            className="w-full max-w-85 overflow-hidden"
+            className="w-full max-w-85 overflow-hidden pb-6 pt-2"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -121,22 +150,45 @@ export default function OurLeadership() {
               {leaders.map((leader, idx) => (
                 <div
                   key={idx}
-                  className="w-full shrink-0 px-2 flex justify-center"
+                  className="w-full shrink-0 px-3 flex justify-center"
                 >
-                  <div className="w-full bg-white border border-[#EFEFEF] rounded-xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.08)] flex flex-col">
-                    <div
-                      className="w-full aspect-square rounded-lg bg-gray-200 bg-cover bg-top mb-5"
-                      style={{
-                        backgroundImage: `url(${leader.image?.src || leader.image})`,
-                      }}
-                    />
-                    <div className="flex flex-col gap-1 px-1 pb-2">
-                      <h3 className="text-[16px] font-bold text-dark tracking-wide">
-                        {leader.role}
-                      </h3>
-                      <p className="text-[15px] font-medium text-grey tracking-wide">
-                        {leader.name}
-                      </p>
+                  <div className="group bg-white rounded-[20px] w-full p-4 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 flex flex-col h-full">
+                    {/* Image Container */}
+                    <a
+                      href={leader.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative block w-full aspect-4/5 rounded-xl overflow-hidden mb-5 bg-gray-50 shrink-0"
+                      aria-label={`LinkedIn profile of ${leader.name}`}
+                    >
+                      <Image
+                        src={leader.image}
+                        alt={leader.name}
+                        fill
+                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </a>
+
+                    {/* Text & Icon */}
+                    <div className="flex items-start justify-between">
+                      <div className="flex flex-col gap-1 pr-3">
+                        <h3 className="text-[18px] font-bold text-[#111827] leading-tight tracking-wide">
+                          {leader.name}
+                        </h3>
+                        <p className="text-[14px] font-medium text-green">
+                          {leader.role}
+                        </p>
+                      </div>
+
+                      <a
+                        href={leader.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 hover:bg-[#0077b5] hover:border-[#0077b5] hover:text-white transition-all duration-300 shadow-sm"
+                        aria-label={`LinkedIn profile of ${leader.name}`}
+                      >
+                        <FaLinkedinIn size={18} />
+                      </a>
                     </div>
                   </div>
                 </div>

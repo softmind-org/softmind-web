@@ -27,6 +27,7 @@ export async function submitContactForm(data) {
           phone: data.phone,
           project_type: data.projectType,
           message: data.message,
+          source_url: data.sourceUrl || null,
           created_at: new Date().toISOString(),
         },
       ]);
@@ -91,6 +92,15 @@ export async function submitContactForm(data) {
                 <tr>
                   <td style="padding:10px 0; color:#6b7280; vertical-align:top;"><strong>Message</strong></td>
                   <td style="padding:10px 0;">${data.message}</td>
+                </tr>
+                <tr style="border-top:1px solid #f3f4f6;">
+                  <td style="padding:10px 0; color:#6b7280;"><strong>Source Page</strong></td>
+                  <td style="padding:10px 0;">
+                    ${data.sourceUrl
+                      ? `<a href="${data.sourceUrl}" style="color:#00235A; word-break:break-all;">${data.sourceUrl}</a>`
+                      : "<span style='color:#9ca3af;'>Not captured</span>"
+                    }
+                  </td>
                 </tr>
               </table>
               <div style="margin-top:20px;">

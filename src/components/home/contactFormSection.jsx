@@ -97,7 +97,10 @@ export default function ContactFormSection() {
 
   const onSubmit = async (data) => {
     try {
-      const result = await submitContactForm(data);
+      // Capture the current page URL so admin knows where the lead came from
+      const sourceUrl =
+        typeof window !== "undefined" ? window.location.href : "";
+      const result = await submitContactForm({ ...data, sourceUrl });
       if (result && !result.success) {
         toast.error(result.error || "Failed to submit form.");
         return;
@@ -387,7 +390,7 @@ export default function ContactFormSection() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-6 bg-navy text-white font-bold rounded-xl hover:bg-[#003080] disabled:bg-navy/70 transition-all duration-300 hover:shadow-lg text-sm tracking-wide mt-1 flex items-center justify-center gap-2 group"
+                className="w-full py-6 bg-navy text-white font-bold rounded-xl hover:bg-[#003080] disabled:bg-navy/70 transition-all duration-300 hover:shadow-lg text-sm tracking-wide mt-1 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

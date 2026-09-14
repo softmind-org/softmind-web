@@ -11,6 +11,8 @@ import EcomOurWork from "@/components/industriesComponents/ecommerceComponents/e
 import EcomEngagementModels from "@/components/industriesComponents/ecommerceComponents/ecomEngagementModels";
 import EcomContactForm from "@/components/industriesComponents/ecommerceComponents/ecomContactForm";
 import EcomFaqs from "@/components/industriesComponents/ecommerceComponents/ecomFaqs";
+import ContactFormSection from "@/components/home/contactFormSection";
+import TestimonialSlider from "@/components/home/testimonialSlider";
 
 export const metadata = {
   title:
@@ -39,7 +41,8 @@ const Ecommerce = () => {
       <EcomProcess />
       {/* <EcomOurWork /> */}
       <EcomEngagementModels />
-      <EcomContactForm />
+      <ContactFormSection />
+      <TestimonialSlider />
       <EcomFaqs />
     </div>
   );

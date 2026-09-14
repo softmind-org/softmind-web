@@ -12,6 +12,8 @@ import PropTechFaq from "@/components/industriesComponents/propTechComponents/pr
 import EngagementModels from "@/components/home/engagementModels";
 import ReachUsOut from "@/components/home/reachUsOut";
 import FinalCta from "@/components/home/finalCta";
+import TestimonialSlider from "@/components/home/testimonialSlider";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 export const metadata = {
   title:
@@ -41,9 +43,10 @@ const PropTech = () => {
       <HowWeWorkProp />
       {/* <PropTechProjects /> */}
       {/* <PropTechCaseStudy /> */}
-      <PropTechTestimonial />
       <EngagementModels />
       <WhyPartner />
+      <TestimonialSlider />
+      <ContactFormSection />
       <PropTechFaq />
       <FinalCta />
     </main>

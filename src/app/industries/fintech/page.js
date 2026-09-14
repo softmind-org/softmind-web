@@ -8,6 +8,7 @@ import FinTechAIExpertise from "@/components/industriesComponents/finTechCompone
 import EngagementModels from "@/components/home/engagementModels";
 import TestimonialSlider from "@/components/home/testimonialSlider";
 import ReachUsOut from "@/components/home/reachUsOut";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 export const metadata = {
   title:
@@ -68,6 +69,7 @@ const FinTech = () => {
       <FinTechAIExpertise />
       <EngagementModels />
       <TestimonialSlider />
+      <ContactFormSection />
       <ReachUsOut />
     </main>
   );

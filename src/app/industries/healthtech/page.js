@@ -7,6 +7,8 @@ import HealthTechBenefits from "@/components/industriesComponents/healthTechComp
 import HealthTechCTA from "@/components/industriesComponents/healthTechComponents/healthTechCTA";
 import HealthWhoWeServe from "@/components/industriesComponents/healthTechComponents/healthWhoWeServe";
 import HealthTestimonial from "@/components/industriesComponents/healthTechComponents/healthTestimonial";
+import TestimonialSlider from "@/components/home/testimonialSlider";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 export const metadata = {
   title:
@@ -34,7 +36,8 @@ const HealthTech = () => {
       {/* <HealthTechProjects /> */}
       <EngagementModels />
       <HealthTechBenefits />
-      <HealthTestimonial />
+      <TestimonialSlider />
+      <ContactFormSection />
       <HealthTechCTA />
     </main>
   );

@@ -12,6 +12,7 @@ import FinalCTA from "@/components/industriesComponents/edTechComponents/edFinal
 import { Hero } from "@/components/home/Hero";
 import WhySoftMind from "@/components/industriesComponents/edTechComponents/edWhySoftMind";
 import TestimonialSlider from "@/components/home/testimonialSlider";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 export const metadata = {
   title:
@@ -40,7 +41,8 @@ export default function EdTechPage() {
       <ModernizationSection />
       {/* <SuccessStories /> */}
       <TestimonialSlider />
-      <DevelopmentProcess />
+      {/* <DevelopmentProcess /> */}
+      <ContactFormSection />
       <FAQs />
       <FinalCTA />
     </div>

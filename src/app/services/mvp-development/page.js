@@ -13,6 +13,8 @@ import MvpSuccessful from "@/components/servicesComponents/mvpComponents/MvpSucc
 import MvpCta from "@/components/servicesComponents/mvpComponents/MvpCta";
 import MvpFaq from "@/components/servicesComponents/mvpComponents/MvpFaq";
 import React from "react";
+import TestimonialSlider from "@/components/home/testimonialSlider";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 const MVP = () => {
   return (
@@ -34,10 +36,11 @@ const MVP = () => {
       <MvpWhyChoose />
       <MvpDevelopmentProcess />
       {/* <MvpCaseStudy /> */}
-      <MvpTestimonials />
       <MvpIndustries />
       <MvpTechnology />
       <MvpSuccessful />
+      <TestimonialSlider />
+      <ContactFormSection />
       <MvpCta />
       <MvpFaq />
     </main>

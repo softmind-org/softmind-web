@@ -38,8 +38,8 @@ const ProductDevelopment = () => {
       <PdForStages />
       <TestimonialSlider />
       {/* <PdCaseStudy /> */}
-      <PdCta />
       <ContactFormSection />
+      <PdCta />
       <PdFaq />
     </main>
   );

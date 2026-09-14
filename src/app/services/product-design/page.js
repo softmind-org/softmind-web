@@ -15,6 +15,7 @@ import PdFaq from "@/components/servicesComponents/productDesignComponents/pdFaq
 import EngagementModels from "@/components/home/engagementModels";
 import PdTechStack from "@/components/servicesComponents/productDesignComponents/pdTechStack";
 import PdCta from "@/components/servicesComponents/productDesignComponents/pdCta";
+import ContactFormSection from "@/components/home/contactFormSection";
 
 export const metadata = {
   title:
@@ -42,10 +43,11 @@ const ProductDesign = () => {
       <PdDesignProcess />
       <PdChallenges />
       <PdWhyChooseUs />
-      <TestimonialSlider />
       <PdTechStack />
       <PdIndustries />
       <PdEngagementModels />
+      <TestimonialSlider />
+      <ContactFormSection />
       <PdFaq />
       <PdCta />
     </main>

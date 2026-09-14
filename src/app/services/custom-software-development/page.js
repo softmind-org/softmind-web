@@ -11,6 +11,7 @@ import CustomSoftwareIndustry from "@/components/servicesComponents/customSoftwa
 import CustomSoftwareFaq from "@/components/servicesComponents/customSoftwareComponents/CustomSoftwareFaq";
 import ContactForm from "@/components/contactUsComponents/ContactForm";
 import ContactFormSection from "@/components/home/contactFormSection";
+import TestimonialSlider from "@/components/home/testimonialSlider";
 
 export const metadata = {
   title:
@@ -41,8 +42,8 @@ const CustomSoftware = () => {
       <CustomSoftwareWhyChoose />
       <CustomSoftwareWhyInvest />
       {/* <CustomSoftwareCaseStudy /> */}
-      <CustomSoftwareTestimonials />
       <CustomSoftwareIndustry />
+      <TestimonialSlider />
       <ContactFormSection />
       <CustomSoftwareFaq />
     </main>

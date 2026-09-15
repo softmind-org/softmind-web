@@ -2,19 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import { SoftMindSolLogo } from "../../../../public/images";
+import ClientLogos from "@/components/home/clientLogos";
 
 export default function AiSaasTrust() {
-  const logos = [
-    { name: "SaaSify", industry: "Cloud Platform", icon: "☁️" },
-    { name: "CognitiveFlow", industry: "Workflow AI", icon: "🧠" },
-    { name: "FinScale", industry: "FinTech SaaS", icon: "💳" },
-    { name: "PropData", industry: "PropTech", icon: "🏠" },
-    { name: "NeuralMed", industry: "HealthTech AI", icon: "🩺" },
-    { name: "Synthetix", industry: "Generative AI", icon: "✨" },
-    { name: "EduCopilot", industry: "EdTech SaaS", icon: "🎓" },
-    { name: "LogiChain", industry: "Logistics AI", icon: "⚙️" },
-  ];
-
   const stats = [
     {
       value: "50+",
@@ -35,72 +25,10 @@ export default function AiSaasTrust() {
   ];
 
   return (
-    <section className="relative w-full py-16 overflow-hidden bg-gray-200 border-b border-gray-100 font-jakarta">
-      {/* Marquee CSS Keyframes */}
-      <style jsx="true">{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .marquee-container {
-          display: flex;
-          width: max-content;
-          animation: marquee 25s linear infinite;
-        }
-        .marquee-container:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-
-      {/* Background radial highlight */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-green/10 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="mx-auto px-6 md:px-12 mb-8 text-center">
-        <span className="text-sm font-bold tracking-[2px] uppercase text-black">
-          Trusted by Innovative SaaS & Enterprise Teams Worldwide
-        </span>
-      </div>
-
+    <section className="relative w-full pb-16 overflow-hidden font-jakarta">
       {/* Infinite Scrolling Client Logos */}
-      <div className="relative w-full overflow-hidden flex items-center mb-16">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-gray-200 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-gray-200 to-transparent z-10 pointer-events-none" />
-
-        <div className="marquee-container flex items-center gap-16 md:gap-20 py-2">
-          {logos.map((logo, idx) => (
-            <div
-              key={`logo-1-${idx}`}
-              className="flex items-center gap-2.5 grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300 cursor-pointer select-none"
-            >
-              <span className="text-2xl">{logo.icon}</span>
-              <span className="font-extrabold text-lg text-navy tracking-tight">
-                {logo.name}
-              </span>
-              <span className="text-[10px] bg-gray-100 text-gray-500 font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">
-                {logo.industry}
-              </span>
-            </div>
-          ))}
-          {/* Duplicate for seamless looping */}
-          {logos.map((logo, idx) => (
-            <div
-              key={`logo-2-${idx}`}
-              className="flex items-center gap-2.5 grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-300 cursor-pointer select-none"
-            >
-              <span className="text-2xl">{logo.icon}</span>
-              <span className="font-extrabold text-lg text-navy tracking-tight">
-                {logo.name}
-              </span>
-              <span className="text-[10px] bg-gray-100 text-gray-500 font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">
-                {logo.industry}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className="relative w-full overflow-hidden flex items-center mb-10">
+        <ClientLogos />
       </div>
 
       {/* Proof of Work Stats Card */}

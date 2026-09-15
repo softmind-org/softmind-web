@@ -142,7 +142,7 @@ const services = [
 
 export default function ServicesOverview() {
   return (
-    <section className="relative w-full py-20 lg:py-28 bg-[#F8FAFC] overflow-hidden font-jakarta">
+    <section className="relative w-full py-16 lg:py-24 bg-gray-200 overflow-hidden font-jakarta">
       <div className="mx-auto px-6 lg:px-12">
         {/* Section Header */}
         <div className="flex flex-col items-center gap-4 text-center mb-16">

@@ -13,6 +13,7 @@ import { Hero } from "@/components/home/Hero";
 import WhySoftMind from "@/components/industriesComponents/edTechComponents/edWhySoftMind";
 import TestimonialSlider from "@/components/home/testimonialSlider";
 import ContactFormSection from "@/components/home/contactFormSection";
+import ClientLogos from "@/components/home/clientLogos";
 
 export const metadata = {
   title:
@@ -33,7 +34,8 @@ export default function EdTechPage() {
         secondaryButtonText={null}
         bottomText={null}
       />
-      <TrustSection />
+      {/* <TrustSection /> */}
+      <ClientLogos />
       <ServicesOverview />
       <AISection />
       <WhySoftMind />

@@ -168,12 +168,12 @@ const ServicesShowCase = () => {
           />
         </div>
 
-        <div className="relative mx-auto px-6 lg:px-12">
+        <div className="relative w-full mx-auto px-6 lg:px-12">
           {/* Header Section */}
           <div className="flex flex-col items-center justify-center space-y-4 mb-16 text-center">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-gradient-to-r from-navy to-blue-600" />
-              <h3 className="text-[22px] font-bold tracking-[1px] text-green">
+              <h3 className="lg:text-[22px] font-bold tracking-[1px] text-green">
                 Custom AI SaaS Development Services
               </h3>
             </div>

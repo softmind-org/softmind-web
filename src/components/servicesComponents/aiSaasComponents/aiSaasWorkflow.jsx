@@ -271,12 +271,12 @@ const StepRow = ({ step, onMove }) => {
   const isLeft = step.side === "left";
 
   return (
-    <div className="relative grid grid-cols-1 pl-14 lg:grid-cols-[minmax(0,1fr)_clamp(4rem,7vw,7rem)_minmax(0,1fr)] lg:items-start lg:pl-0">
+    <div className="relative grid grid-cols-1 pl-12 xs:pl-14 lg:grid-cols-[minmax(0,1fr)_clamp(4rem,7vw,7rem)_minmax(0,1fr)] lg:items-start lg:pl-0">
       {/* Rail marker + elbow */}
       <div className="absolute left-[22px] top-[28px] z-20 -translate-x-1/2 lg:static lg:col-start-2 lg:mt-[28px] lg:translate-x-0 lg:justify-self-center">
         <div className="relative">
           <span
-            className={`${step.key}-marker flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-[#08080B] text-[11px] font-semibold tabular-nums text-white/55 shadow-[0_0_0_6px_#050507]`}
+            className={`${step.key}-marker flex h-8 w-8 items-center justify-center rounded-full border border-white/12 bg-[#08080B] text-[12px] font-semibold tabular-nums text-white/55 shadow-[0_0_0_6px_#050507]`}
           >
             {step.index}
           </span>
@@ -298,7 +298,7 @@ const StepRow = ({ step, onMove }) => {
       >
         <div
           onMouseMove={onMove}
-          className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012))] p-5 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-[3px] hover:border-[#0CBF83]/30 hover:shadow-[0_20px_46px_-28px_rgba(12,191,131,0.55)] sm:p-6"
+          className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.012))] p-4 transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-[3px] hover:border-[#0CBF83]/30 hover:shadow-[0_20px_46px_-28px_rgba(12,191,131,0.55)] sm:p-5 lg:p-6"
         >
           {/* top hairline + cursor spotlight */}
           <span className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
@@ -310,16 +310,16 @@ const StepRow = ({ step, onMove }) => {
           <div
             className={`flex items-baseline gap-2.5 ${isLeft ? "lg:flex-row-reverse" : ""}`}
           >
-            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0CBF83]/75">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.16em] text-[#0CBF83]/75">
               Step {step.index}
             </span>
             <span className="h-px flex-1 bg-white/[0.07]" />
           </div>
 
-          <h3 className="mt-3 text-[clamp(1.0625rem,1.35vw,1.1875rem)] font-semibold leading-snug tracking-[-0.01em] text-white">
+          <h3 className="mt-3 text-[clamp(1.125rem,2.2vw,1.25rem)] font-semibold leading-snug tracking-[-0.01em] text-white">
             {step.title}
           </h3>
-          <p className="mt-1.5 text-[13px] leading-relaxed text-white/45">
+          <p className="mt-1.5 text-[14px] leading-relaxed text-white/45">
             {step.caption}
           </p>
 
@@ -333,10 +333,10 @@ const StepRow = ({ step, onMove }) => {
               >
                 <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#0CBF83]/60 transition-colors duration-200 group-hover/sub:bg-[#0CBF83]" />
                 <span className="min-w-0">
-                  <span className="block text-[13.5px] font-medium leading-snug text-white/85 transition-colors duration-200 group-hover/sub:text-white">
+                  <span className="block text-[14px] font-medium leading-snug text-white/85 transition-colors duration-200 group-hover/sub:text-white">
                     {sub.title}
                   </span>
-                  <span className="mt-1 block text-[12.5px] leading-relaxed text-white/40">
+                  <span className="mt-1 block text-[13px] leading-relaxed text-white/40">
                     {sub.desc}
                   </span>
                 </span>
@@ -581,16 +581,16 @@ const AiSaasWorkflow = () => {
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1120px] px-5 sm:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-[1120px] px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mx-auto max-w-[44rem] text-center">
           <div className="title-anim inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-[linear-gradient(104deg,#00235A,#004BC0)] shadow-[0_0_8px_#004BC0]" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#0CBF83] sm:text-[12px]">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#0CBF83] sm:text-[13px]">
               AI SaaS Development
             </span>
           </div>
-          <h2 className="title-anim mt-6 text-[clamp(1.75rem,4.2vw,2.875rem)] font-semibold leading-[1.14] tracking-[-0.022em] text-white">
+          <h2 className="title-anim mt-6 text-[clamp(1.875rem,4.8vw,3rem)] font-semibold leading-[1.14] tracking-[-0.022em] text-white">
             Build More Than Software.
             <br />
             <span className="bg-[linear-gradient(100deg,#ffffff_0%,#8ee9c8_58%,#5aa2ff_100%)] bg-clip-text text-transparent">
@@ -631,7 +631,7 @@ const AiSaasWorkflow = () => {
             style={{ gap: STACK_GAP }}
           >
             {/* Hub */}
-            <div className="pl-14 lg:pl-0">
+            <div className="pl-12 xs:pl-14 lg:pl-0">
               <div
                 data-node="hub"
                 className="hub-node relative mx-auto w-full lg:max-w-[420px]"
@@ -645,10 +645,10 @@ const AiSaasWorkflow = () => {
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                     style={{ background: SPOTLIGHT }}
                   />
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0CBF83]">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#0CBF83]">
                     Central Hub
                   </p>
-                  <h3 className="mt-2 text-[clamp(1.125rem,1.7vw,1.3125rem)] font-semibold tracking-[-0.012em] text-white">
+                  <h3 className="mt-2 text-[clamp(1.1875rem,2.2vw,1.375rem)] font-semibold tracking-[-0.012em] text-white">
                     AI SaaS Development
                   </h3>
                 </div>
@@ -683,7 +683,7 @@ const AiSaasWorkflow = () => {
             </div>
 
             {/* Destination */}
-            <div className="pl-14 lg:pl-0">
+            <div className="pl-12 xs:pl-14 lg:pl-0">
               <div
                 data-node="out"
                 className="out-node relative mx-auto w-full max-w-[860px]"
@@ -701,7 +701,7 @@ const AiSaasWorkflow = () => {
                     <span className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[68%] -translate-x-1/2 rounded-full bg-[#0CBF83]/12 blur-[80px]" />
 
                     <div className="relative flex flex-col items-center text-center">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-[#0CBF83]/28 bg-[#0CBF83]/[0.08] px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#0CBF83] sm:text-[11px]">
+                      <span className="inline-flex items-center gap-2 rounded-full border border-[#0CBF83]/28 bg-[#0CBF83]/[0.08] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0CBF83] sm:text-[12px]">
                         Destination Node
                       </span>
 
@@ -709,11 +709,11 @@ const AiSaasWorkflow = () => {
                         <RocketIcon className="h-[22px] w-[22px]" />
                       </span>
 
-                      <h3 className="mt-5 text-[clamp(1.25rem,2.4vw,1.6875rem)] font-semibold leading-tight tracking-[-0.018em] text-white">
+                      <h3 className="mt-5 text-[clamp(1.375rem,2.8vw,1.8125rem)] font-semibold leading-tight tracking-[-0.018em] text-white">
                         Production-Ready AI SaaS Product
                       </h3>
 
-                      <p className="mt-3 max-w-[54ch] text-[13.5px] leading-relaxed text-white/55 sm:text-[14px]">
+                      <p className="mt-3 max-w-[54ch] text-[14px] leading-relaxed text-white/55 sm:text-[15px]">
                         A live, scalable, secure AI-powered SaaS application
                         built, deployed, and continuously improved for your
                         business.
@@ -722,7 +722,7 @@ const AiSaasWorkflow = () => {
 
                     <div className="my-[clamp(1.5rem,3vw,2rem)] h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-                    <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/65">
+                    <h4 className="text-[12px] font-semibold uppercase tracking-[0.2em] text-white/65">
                       What you walk away with:
                     </h4>
 
@@ -735,7 +735,7 @@ const AiSaasWorkflow = () => {
                           <span className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0CBF83]/15 text-[#0CBF83]">
                             <CheckIcon className="h-3 w-3" />
                           </span>
-                          <span className="text-[13px] leading-relaxed text-white/80">
+                          <span className="text-[14px] leading-relaxed text-white/80">
                             {item}
                           </span>
                         </div>

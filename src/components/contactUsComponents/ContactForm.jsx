@@ -1,9 +1,12 @@
 "use client";
 
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { toast } from "sonner";
 import { trackEvent } from "@/lib/ga";
+import { submitContactForm } from "@/app/actions/contact";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
@@ -13,6 +16,7 @@ const formSchema = z.object({
 });
 
 const ContactForm = () => {
+  const [submitting, setSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
@@ -22,13 +26,33 @@ const ContactForm = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    // Submit logic here
-    alert("Message sent successfully!");
-    // GA4: fire generate_lead only after confirmed submission
-    trackEvent("generate_lead", { location: "contact_page_form" });
-    reset();
+  const onSubmit = async (data) => {
+    setSubmitting(true);
+    try {
+      const sourceUrl = typeof window !== "undefined" ? window.location.href : "";
+      const res = await submitContactForm({
+        name: data.fullName,
+        email: data.email,
+        phone: data.company || "",
+        projectType: "General Inquiry",
+        message: data.message,
+        sourceUrl,
+      });
+
+      if (!res || !res.success) {
+        toast.error(res?.error || "Failed to submit inquiry. Please try again.");
+        return;
+      }
+
+      toast.success("Thanks for reaching out! We've received your inquiry.");
+      trackEvent("generate_lead", { location: "contact_page_form" });
+      reset();
+    } catch (err) {
+      console.error("Contact form error:", err);
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -142,7 +166,7 @@ const ContactForm = () => {
               <input
                 {...register("company")}
                 type="text"
-                placeholder="Company (Optional)"
+                placeholder="Company / Phone (Optional)"
                 className="w-full h-[54px] px-4 rounded-[8px] border border-[#EBEBEB] text-[15px] text-dark placeholder-[#999999] focus:outline-none focus:border-green focus:ring-1 focus:ring-green transition-all bg-transparent"
               />
             </div>
@@ -163,9 +187,10 @@ const ContactForm = () => {
 
             <button
               type="submit"
-              className="w-full h-[56px] mt-2 bg-green hover:bg-[#0aa672] text-white font-bold text-[16px] rounded-[12px] transition-colors flex justify-center items-center"
+              disabled={submitting}
+              className="w-full h-[56px] mt-2 bg-green hover:bg-[#0aa672] disabled:opacity-70 text-white font-bold text-[16px] rounded-[12px] transition-colors flex justify-center items-center cursor-pointer"
             >
-              Send a message
+              {submitting ? "Sending message..." : "Send a message"}
             </button>
           </form>
         </div>

@@ -95,17 +95,17 @@ function SlideBackgrounds({ slides, currentSlide }) {
 /** Left-aligned text block: badge → heading → subheading → tags → CTA buttons. */
 function SlideContent({ slide, onDiscoveryCall, onViewWork }) {
   return (
-    <div className="flex flex-col gap-5 sm:gap-6 max-w-3xl">
+    <div className="flex flex-col gap-4 sm:gap-6 max-w-3xl w-full">
       {/* ── Top Blue Bar text ── */}
-      <div className="flex items-center gap-3 bg-[#283143] backdrop-blur-sm pr-6 py-3 border-l-4 border-[#0369E5]/80 w-fit mb-2 animate-hs-badge shadow-lg">
-        <span className="text-white/90 text-sm sm:text-base font-semibold tracking-wide pl-4">
+      <div className="flex items-center gap-2 sm:gap-3 bg-[#283143] backdrop-blur-sm pr-4 sm:pr-6 py-2 sm:py-3 border-l-4 border-[#0369E5]/80 w-fit mb-2 animate-hs-badge shadow-lg">
+        <span className="text-white/90 text-sm font-semibold tracking-wide pl-3 sm:pl-4">
           AI enabled Product Engineering and Digital Solution Partner
         </span>
       </div>
 
       {/* ── Category badge ── */}
       <div className="animate-hs-badge">
-        <span className="inline-flex items-center gap-2.5 px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full border border-white/30 text-white/80 text-[10px] sm:text-xs font-bold tracking-[2px] sm:tracking-[3px] uppercase">
+        <span className="inline-flex items-center gap-2 sm:gap-2.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-white/30 text-white/80 text-[10px] sm:text-xs font-bold tracking-[1.5px] sm:tracking-[3px] uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0CBF83]" />
           {slide.badge}
         </span>
@@ -118,23 +118,23 @@ function SlideContent({ slide, onDiscoveryCall, onViewWork }) {
       {/* ── Main heading ── */}
       <h1 className="text-white font-extrabold leading-[1.1] tracking-tight">
         {/* Line 1 — plain white */}
-        <span className="animate-hs-heading block text-3xl md:text-4xl lg:text-5xl">
+        <span className="animate-hs-heading block text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
           {slide.heading}
         </span>
 
         {/* Line 2 — white-to-green gradient */}
-        <span className="animate-hs-subheading block mt-3 sm:mt-4 text-base lg:text-xl tracking-wide font-medium text-white/90 max-w-2xl">
+        <span className="animate-hs-subheading block mt-2 sm:mt-4 text-[15px] sm:text-base lg:text-xl tracking-wide font-medium text-white/90 max-w-2xl">
           {slide.subheading}
         </span>
       </h1>
 
       {/* ── Keyword tags ── */}
       {slide.tags && slide.tags.length > 0 && (
-        <div className="animate-hs-tags flex flex-wrap gap-2 opacity-0">
+        <div className="animate-hs-tags flex flex-wrap gap-1.5 sm:gap-2 opacity-0">
           {slide.tags.map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/45 bg-white/15 backdrop-blur-sm tracking-wide"
+              className="px-2.5 py-1 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold text-white border border-white/45 bg-white/15 backdrop-blur-sm tracking-wide"
             >
               {tag}
             </span>
@@ -147,7 +147,7 @@ function SlideContent({ slide, onDiscoveryCall, onViewWork }) {
         <Link href="/contact-us">
           <button
             onClick={onDiscoveryCall}
-            className="group flex items-center gap-3 px-6 py-3 sm:px-7 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wide text-white cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(12,191,131,0.4)] bg-[linear-gradient(135deg,#0CBF83_0%,#004BC0_100%)] w-full sm:w-auto justify-center"
+            className="group flex items-center gap-3 px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-wide text-white cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(12,191,131,0.4)] bg-[linear-gradient(135deg,#0CBF83_0%,#004BC0_100%)] w-fit"
           >
             Book a Discovery Call
             <FaArrowRight
@@ -183,7 +183,7 @@ function VerticalCounter({
   const totalLabel = String(totalSlides).padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center gap-4 select-none">
+    <div className="flex flex-col items-center gap-3 sm:gap-4 select-none shrink-0">
       {/* ↑ Prev */}
       <SliderArrowButton
         onClick={onPrev}
@@ -200,15 +200,14 @@ function VerticalCounter({
           {currentLabel}
         </div>
 
-        {/* Vertical progress track */}
-        <div className="relative w-[2px] bg-white/15 rounded-full overflow-hidden h-[80px]">
+        <div className="relative w-[2px] bg-white/15 rounded-full overflow-hidden h-[60px] sm:h-[80px]">
           <div
             key={`${currentSlide}-prog`}
             className="animate-hs-prog-fill absolute top-0 left-0 w-full rounded-full bg-[#0CBF83]"
           />
         </div>
 
-        <div className="text-white font-medium tabular-nums text-[0.85rem]">
+        <div className="text-white font-medium tabular-nums text-[0.75rem] sm:text-[0.85rem]">
           {totalLabel}
         </div>
       </div>
@@ -230,10 +229,10 @@ function SliderArrowButton({ onClick, direction, ariaLabel }) {
     <button
       onClick={onClick}
       aria-label={ariaLabel}
-      className="w-9 h-9 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:border-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+      className="w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border border-white/20 text-white/50 hover:border-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
     >
       <svg
-        className="w-4 h-4"
+        className="w-3 h-3 sm:w-4 sm:h-4"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -337,10 +336,10 @@ export default function HomeHeroSlider() {
         <SlideBackgrounds slides={SLIDES} currentSlide={currentSlide} />
 
         {/* Layer 2 — Foreground content (z-10) */}
-        <div className="relative z-10 flex flex-col justify-between min-h-[calc(100svh+82px)] pt-12 lg:pt-0">
+        <div className="relative z-10 flex flex-col justify-between min-h-[calc(100svh+82px)] pt-32 sm:pt-36 lg:pt-[82px] pb-4 lg:pb-0">
           {/* Main content row: text left, counter right */}
           <div className="flex-1 flex items-center">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-8">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-4 sm:gap-8">
               <SlideContent
                 key={
                   currentSlide
@@ -375,30 +374,35 @@ export default function HomeHeroSlider() {
                   technology companies
                 </span>
 
-                <div className="flex flex-wrap items-center gap-6 lg:gap-12 transition-all duration-500">
-                  <div className="flex items-center gap-2 text-white font-bold text-xl">
-                    <FcGoogle size={28} />
+                <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:gap-12 transition-all duration-500 mt-3 lg:mt-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white font-bold text-base sm:text-xl">
+                    <FcGoogle className="w-5 h-5 sm:w-7 sm:h-7" />
                     <span>Google</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-bold text-xl">
-                    <FaMeta size={28} color="#0369E5" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white font-bold text-base sm:text-xl">
+                    <FaMeta color="#0369E5" className="w-5 h-5 sm:w-7 sm:h-7" />
                     <span>Meta</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-bold text-xl">
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white font-bold text-base sm:text-xl">
                     <Image
                       src={MsLogo}
                       alt="Microsoft"
-                      width={22}
-                      height={22}
+                      className="w-[18px] h-[18px] sm:w-[22px] sm:h-[22px]"
                     />
                     <span>Microsoft</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-bold text-xl">
-                    <BsAnthropic size={28} color="#ffffff" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white font-bold text-base sm:text-xl">
+                    <BsAnthropic
+                      color="#ffffff"
+                      className="w-5 h-5 sm:w-7 sm:h-7"
+                    />
                     <span>Anthropic</span>
                   </div>
-                  <div className="flex items-center gap-2 text-white font-bold text-xl">
-                    <SiCisco size={34} color="#049fd9" />
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-white font-bold text-base sm:text-xl">
+                    <SiCisco
+                      color="#049fd9"
+                      className="w-6 h-6 sm:w-[34px] sm:h-[34px]"
+                    />
                     <span>Cisco</span>
                   </div>
                 </div>

@@ -1,0 +1,14 @@
+# Robots.txt for SoftMind Solutions
+# https://www.softmindsol.com
+
+User-agent: *
+Allow: /
+
+# Block API routes and internal Next.js paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /actions/
+
+# Sitemap locations
+Sitemap: https://www.softmindsol.com/sitemap.xml
+Sitemap: https://www.softmindsol.com/sitemap.txt

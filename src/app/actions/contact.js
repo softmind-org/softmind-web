@@ -15,47 +15,49 @@ export async function submitContactForm(data) {
       return { success: false, error: "Name and email are required." };
     }
 
+    // 1. Submit lead to SoftOps Business Development pipeline (MQL stage, website_contact tag)
+    let rpcResult = null;
+    let rpcError = null;
+
     if (
-      !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-      !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     ) {
-      console.warn(
-        "Supabase credentials are not set. Simulating form submission.",
-      );
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      return { success: true };
+      try {
+        const supabase = await createClient();
+        const res = await supabase.rpc("submit_website_contact_lead", {
+          p_name: name,
+          p_email: email,
+          p_phone: phone || null,
+          p_project_type: projectType || null,
+          p_message: message || null,
+          p_source_url: sourceUrl || null,
+        });
+        rpcResult = res.data;
+        rpcError = res.error;
+      } catch (clientErr) {
+        console.error("Supabase client initialization error:", clientErr);
+        rpcError = clientErr;
+      }
+    } else {
+      console.warn("Supabase credentials not configured in environment.");
     }
-
-    const supabase = await createClient();
-
-    // Directly submit to SoftOps Business Development pipeline in MQL stage with website_contact tag
-    const { data: rpcResult, error: rpcError } = await supabase.rpc(
-      "submit_website_contact_lead",
-      {
-        p_name: name,
-        p_email: email,
-        p_phone: phone || null,
-        p_project_type: projectType || null,
-        p_message: message || null,
-        p_source_url: sourceUrl || null,
-      },
-    );
 
     if (rpcError) {
       console.error("Supabase submit_website_contact_lead error:", rpcError);
-      return { success: false, error: "Failed to submit inquiry to pipeline." };
     }
 
-    if (rpcResult && rpcResult.success === false) {
-      return {
-        success: false,
-        error: rpcResult.error || "Submission rejected by pipeline.",
-      };
-    }
+    const leadId = rpcResult?.lead_id;
 
-    // Insert successful — send confirmation email to user & alert to admin
+    // 2. Send email notifications via Resend (Visitor confirmation & Admin notification)
+    // Email sending is guaranteed and executes alongside the SoftOps integration
     if (process.env.RESEND_API_KEY) {
-      const ADMIN_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || "bilalbhatti@softmindsol.com";
+      const rawAdminEmails =
+        process.env.ADMIN_NOTIFICATION_EMAIL || "bilalbhatti@softmindsol.com,ahmadnawaz@softmindsol.com";
+      const adminRecipients = rawAdminEmails
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean);
 
       const userEmailPayload = {
         from: "SoftMind Solutions <contact@softmindsol.com>",
@@ -68,16 +70,20 @@ export async function submitContactForm(data) {
             <p>Our business development team will review your submission and get back to you within 24 hours.</p>
             <p style="color:#666; font-size:13px; margin-top:24px;">
               <strong>Your message:</strong><br/>
-              ${message}
+              ${message || "(No message provided)"}
             </p>
             <p>Best regards,<br/>SoftMind Solutions Team</p>
           </div>
         `,
       };
 
+      const softOpsUrl = leadId
+        ? `https://dashboard.softmindsol.com/admin/bd/leads/${leadId}`
+        : null;
+
       const adminEmailPayload = {
         from: "SoftMind Website <contact@softmindsol.com>",
-        to: ADMIN_EMAIL,
+        to: adminRecipients,
         subject: `🔔 New Website Lead: ${name} — ${projectType}`,
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
@@ -104,7 +110,7 @@ export async function submitContactForm(data) {
                 </tr>
                 <tr>
                   <td style="padding:10px 0; color:#6b7280; vertical-align:top;"><strong>Message</strong></td>
-                  <td style="padding:10px 0;">${message}</td>
+                  <td style="padding:10px 0;">${message || "No message provided."}</td>
                 </tr>
                 <tr style="border-top:1px solid #f3f4f6;">
                   <td style="padding:10px 0; color:#6b7280;"><strong>Source Page</strong></td>
@@ -116,15 +122,22 @@ export async function submitContactForm(data) {
                   </td>
                 </tr>
               </table>
-              <div style="margin-top:20px;">
+              <div style="margin-top:20px; display:flex; gap:12px;">
+                ${softOpsUrl
+                  ? `<a href="${softOpsUrl}"
+                       style="display:inline-block; background:#00235A; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-size:14px; font-weight:600;">
+                      Open in SoftOps Pipeline →
+                    </a>`
+                  : ""
+                }
                 <a href="mailto:${email}?subject=Re: Your ${projectType} project inquiry"
-                   style="display:inline-block; background:#00235A; color:#fff; padding:10px 20px; border-radius:6px; text-decoration:none; font-size:14px;">
+                   style="display:inline-block; background:#f3f4f6; color:#111827; padding:10px 18px; border-radius:6px; text-decoration:none; font-size:14px; font-weight:500;">
                   Reply to ${name}
                 </a>
               </div>
             </div>
             <div style="background:#f9fafb; padding:12px 24px; font-size:12px; color:#9ca3af;">
-              Submitted on ${new Date().toLocaleString("en-PK", { timeZone: "Asia/Karachi" })} PKT · Tagged in SoftOps as Website Contact
+              Submitted on ${new Date().toLocaleString("en-PK", { timeZone: "Asia/Karachi" })} PKT · Automatically logged in SoftOps as Website Contact (MQL)
             </div>
           </div>
         `,
@@ -163,9 +176,11 @@ export async function submitContactForm(data) {
       } catch (emailErr) {
         console.error("Unexpected email error:", emailErr);
       }
+    } else {
+      console.warn("RESEND_API_KEY not set. Skipping emails.");
     }
 
-    return { success: true, leadId: rpcResult?.lead_id };
+    return { success: true, leadId };
   } catch (error) {
     console.error("Server action error:", error);
     return { success: false, error: "An unexpected error occurred." };

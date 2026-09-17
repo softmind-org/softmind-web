@@ -1,22 +1,39 @@
 import { safeSanityFetch, allSlugsQuery } from "@/lib/sanity/client";
 
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://softmindsol.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.softmindsol.com";
 
-  // Static site routes
+  // Core & static routes
   const staticRoutes = [
-    "",
-    "/about-us",
-    "/contact-us",
-    "/blog",
-    "/services",
-    "/case-studies",
-    "/industries",
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
+    { route: "", priority: 1.0, changefreq: "weekly" },
+    { route: "/about-us", priority: 0.8, changefreq: "monthly" },
+    { route: "/contact-us", priority: 0.8, changefreq: "monthly" },
+    { route: "/case-studies", priority: 0.7, changefreq: "monthly" },
+    { route: "/blog", priority: 0.8, changefreq: "weekly" },
+
+    // Services
+    { route: "/services/ai-saas-development", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/custom-software-development", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/dedicated-development-teams", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/mobile-app-development", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/mvp-development", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/product-design", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/product-development", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/software-testing", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/staff-augmentation", priority: 0.9, changefreq: "monthly" },
+    { route: "/services/web-app-development", priority: 0.9, changefreq: "monthly" },
+
+    // Industries
+    { route: "/industries/ecommerce", priority: 0.8, changefreq: "monthly" },
+    { route: "/industries/edtech", priority: 0.8, changefreq: "monthly" },
+    { route: "/industries/fintech", priority: 0.8, changefreq: "monthly" },
+    { route: "/industries/healthtech", priority: 0.8, changefreq: "monthly" },
+    { route: "/industries/proptech", priority: 0.8, changefreq: "monthly" },
+  ].map((item) => ({
+    url: `${baseUrl}${item.route}`,
     lastModified: new Date().toISOString(),
-    changeFrequency: route === "" || route === "/blog" ? "daily" : "weekly",
-    priority: route === "" ? 1.0 : 0.8,
+    changeFrequency: item.changefreq,
+    priority: item.priority,
   }));
 
   // Dynamic Sanity routes (posts and pages)
@@ -40,3 +57,4 @@ export default async function sitemap() {
 
   return [...staticRoutes, ...sanityRoutes];
 }
+

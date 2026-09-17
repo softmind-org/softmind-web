@@ -18,8 +18,9 @@ export const metadata = {
 
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import ChatbaseWidget from "@/components/layout/ChatbaseWidget";
+import ChatbotWidget from "@/components/layout/ChatbotWidget";
 import { RouteLoader } from "@/components/customs/routeLoader";
+import { OrganizationJsonLd } from "@/components/seo/JsonLd";
 
 export default function RootLayout({ children }) {
   return (
@@ -32,11 +33,12 @@ export default function RootLayout({ children }) {
         className="min-h-full flex flex-col bg-white selection:bg-green selection:text-white"
         suppressHydrationWarning
       >
+        <OrganizationJsonLd />
         <Navbar />
         <RouteLoader />
         <main className="flex-1">{children}</main>
         <Footer />
-        <ChatbaseWidget />
+        <ChatbotWidget />
       </body>
       {process.env.NEXT_PUBLIC_GA_ID && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

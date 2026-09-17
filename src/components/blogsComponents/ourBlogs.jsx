@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Star, Clock } from "lucide-react";
 import { SoftMindSolLogo } from "../../../public/images";
 
-const blogPosts = [
+const defaultBlogPosts = [
   {
     id: 1,
     title: "The Future of AI in Modern Businesses",
@@ -74,7 +74,8 @@ const blogPosts = [
   },
 ];
 
-export default function OurBlogs() {
+export default function OurBlogs({ initialPosts }) {
+  const postsToDisplay = initialPosts && initialPosts.length > 0 ? initialPosts : defaultBlogPosts;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(1);
   const [isMounted, setIsMounted] = useState(false);
@@ -88,16 +89,16 @@ export default function OurBlogs() {
 
       setItemsPerView(newItemsPerView);
       setCurrentIndex((prev) =>
-        Math.min(prev, Math.max(0, blogPosts.length - newItemsPerView)),
+        Math.min(prev, Math.max(0, postsToDisplay.length - newItemsPerView)),
       );
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [postsToDisplay.length]);
 
-  const maxIndex = Math.max(0, blogPosts.length - itemsPerView);
+  const maxIndex = Math.max(0, postsToDisplay.length - itemsPerView);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -150,7 +151,7 @@ export default function OurBlogs() {
               transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
             }}
           >
-            {blogPosts.map((blog) => (
+            {postsToDisplay.map((blog) => (
               <div
                 key={blog.id}
                 className="w-full shrink-0 px-3 md:w-1/2 lg:w-1/3"

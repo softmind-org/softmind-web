@@ -1,12 +1,12 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import FinalCta from "@/components/home/finalCta";
 import { ArrowLeft, LinkIcon, Mail } from "lucide-react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import SummarizeButton from "@/components/blogsComponents/summarizeButton";
+import { safeSanityFetch, postBySlugQuery, urlFor, portableTextToPlainText } from "@/lib/sanity/client";
+import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
-const blogPosts = {
+const fallbackBlogPosts = {
   "blog-detail": {
     title: "The Future of AI in Modern Businesses",
     image:
@@ -14,6 +14,7 @@ const blogPosts = {
     date: "June 6, 2026",
     readTime: "15 min read",
     author: "Written by User name",
+    content: "Artificial Intelligence (AI) is no longer a futuristic concept — it has become a true driver of innovation and business growth. Organizations across the globe are integrating AI into their core operations to improve decision-making, enhance customer experiences, and unlock new opportunities.",
   },
   "reshaping-real-estate": {
     title: "How Technology is Reshaping Real Estate",
@@ -22,48 +23,84 @@ const blogPosts = {
     date: "June 8, 2026",
     readTime: "12 min read",
     author: "Written by User name",
-  },
-  "health-tech-insights": {
-    title: "Health Tech Insights & Innovations",
-    image:
-      "https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?auto=format&fit=crop&w=1600&q=80",
-    date: "June 10, 2026",
-    readTime: "10 min read",
-    author: "Written by User name",
-  },
-  "edtech-trends": {
-    title: "EdTech Trends & Insights",
-    image:
-      "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80",
-    date: "June 12, 2026",
-    readTime: "8 min read",
-    author: "Written by User name",
-  },
-  "fintech-trends": {
-    title: "FinTech Trends & Insights",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80",
-    date: "June 14, 2026",
-    readTime: "14 min read",
-    author: "Written by User name",
-  },
-  "reshaping-retail": {
-    title: "How Technology is Reshaping Retail",
-    image:
-      "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1600&q=80",
-    date: "June 16, 2026",
-    readTime: "11 min read",
-    author: "Written by User name",
+    content: "From smart property management to digital tenant experiences, technology is driving unprecedented efficiency in real estate operations.",
   },
 };
 
-export default function BlogDetail({ params }) {
-  // Use slug from URL or fallback to the first blog if not found
-  const slug = params?.slug || "blog-detail";
-  const post = blogPosts[slug] || blogPosts["blog-detail"];
+export async function generateMetadata({ params }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug || "blog-detail";
+  
+  let sanityPost = null;
+  try {
+    sanityPost = await safeSanityFetch(postBySlugQuery, { slug });
+  } catch (err) {
+    console.warn("Sanity generateMetadata warning:", err.message);
+  }
+
+  const title = sanityPost?.seoTitle || sanityPost?.title || fallbackBlogPosts[slug]?.title || "Blog Post | SoftMind Solutions";
+  const description = sanityPost?.seoDescription || sanityPost?.excerpt || "Read expert perspectives and practical tips on AI and software development.";
+  const image = sanityPost?.ogImage ? urlFor(sanityPost.ogImage)?.url() : sanityPost?.coverImage ? urlFor(sanityPost.coverImage)?.url() : fallbackBlogPosts[slug]?.image;
+  const url = `https://softmindsol.com/blog/${slug}`;
+
+  return {
+    title: `${title} | SoftMind Solutions`,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      images: image ? [{ url: image }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : [],
+    },
+  };
+}
+
+export default async function BlogDetail({ params }) {
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug || "blog-detail";
+
+  let sanityPost = null;
+  try {
+    sanityPost = await safeSanityFetch(postBySlugQuery, { slug });
+  } catch (err) {
+    console.warn("Sanity post fetch warning:", err.message);
+  }
+
+  const fallback = fallbackBlogPosts[slug] || fallbackBlogPosts["blog-detail"];
+
+  const title = sanityPost?.title || fallback.title;
+  const image = sanityPost?.coverImage ? urlFor(sanityPost.coverImage)?.url() : fallback.image;
+  const date = sanityPost?.publishedAt ? new Date(sanityPost.publishedAt).toLocaleDateString() : fallback.date;
+  const author = "SoftMind Solutions";
+  const readTime = "10 min read";
+
+  const plainTextContent = sanityPost?.body
+    ? portableTextToPlainText(sanityPost.body)
+    : fallback.content;
+
+  const currentUrl = `https://softmindsol.com/blog/${slug}`;
 
   return (
     <main className="w-full flex flex-col bg-white text-[#161616] font-jakarta">
+      <ArticleJsonLd post={{ title, excerpt: sanityPost?.excerpt, coverImage: image, publishedAt: sanityPost?.publishedAt, author }} url={currentUrl} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "https://softmindsol.com" },
+          { name: "Blog", url: "https://softmindsol.com/blog" },
+          { name: title, url: currentUrl },
+        ]}
+      />
+
       {/* Top Banner Section */}
       <section className="w-full relative px-4 md:px-8 pt-12 pb-20 max-w-[1400px] mx-auto">
         <div className="w-full mb-6">
@@ -80,8 +117,8 @@ export default function BlogDetail({ params }) {
         <div className="w-full h-[300px] md:h-[500px] relative rounded-2xl overflow-hidden mb-[-60px] z-0 shadow-lg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={post.image}
-            alt={post.title}
+            src={image}
+            alt={title}
             className="w-full h-full object-cover"
           />
         </div>
@@ -89,7 +126,7 @@ export default function BlogDetail({ params }) {
         {/* Title Box */}
         <div className="relative z-10 w-[95%] md:w-[85%] mx-auto bg-[#F4F4F5] rounded-[20px] p-8 md:p-12 shadow-md flex flex-col items-center text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-8 max-w-[800px] leading-tight text-navy">
-            {post.title}
+            {title}
           </h1>
 
           <div className="flex flex-col sm:flex-row items-center justify-between w-full mt-4">
@@ -104,13 +141,13 @@ export default function BlogDetail({ params }) {
                 </svg>
               </div>
               <div className="text-left">
-                <p className="font-semibold text-[15px]">{post.author}</p>
+                <p className="font-semibold text-[15px]">{author}</p>
                 <p className="text-sm text-gray-500">Author</p>
               </div>
             </div>
             <div className="mt-4 sm:mt-0 text-gray-500 font-medium">
-              <span>{post.date}</span> <span className="mx-2">•</span>{" "}
-              <span>{post.readTime}</span>
+              <span>{date}</span> <span className="mx-2">•</span>{" "}
+              <span>{readTime}</span>
             </div>
           </div>
         </div>
@@ -150,153 +187,18 @@ export default function BlogDetail({ params }) {
           <article className="flex-1 max-w-[850px] text-[17px] leading-[1.8] text-gray-700 font-medium">
             <div className="mb-8">
               <SummarizeButton 
-                content={`${post.title}\n\nArtificial Intelligence (AI) is no longer a futuristic concept — it has become a true driver of innovation and business growth. Organizations across the globe are integrating AI into their core operations to improve decision-making, enhance customer experiences, and unlock new opportunities. As technology continues to evolve, AI is transforming the way businesses operate, helping them become more agile and competitive.`} 
+                content={`${title}\n\n${plainTextContent}`} 
                 theme="light" 
               />
             </div>
-            <p className="mb-8">
-              Artificial Intelligence (AI) is no longer a futuristic concept —
-              it has become a true driver of innovation and business growth.
-              Organizations across the globe are integrating AI into their core
-              operations to improve decision-making, enhance customer
-              experiences, and unlock new opportunities. As technology continues
-              to evolve, AI is transforming the way businesses operate, helping
-              them become more agile and competitive.
-            </p>
-
-            <h2 className="text-2xl font-bold text-navy mb-4 mt-12">
-              What is AI in Business?
-            </h2>
-            <p className="mb-6">
-              AI in business refers to the use of intelligent systems and
-              algorithms that can analyze data, recognize patterns, make
-              predictions, and automate tasks that traditionally required human
-              intelligence. These technologies include:
-            </p>
-            <ul className="list-disc pl-6 mb-8 space-y-2 text-gray-700">
-              <li>Machine Learning (ML)</li>
-              <li>Natural Language Processing (NLP)</li>
-              <li>Computer Vision</li>
-              <li>Predictive Analytics</li>
-              <li>Generative AI</li>
-              <li>Robotic Process Automation (RPA)</li>
-            </ul>
-            <p className="mb-12">
-              By integrating these technologies into daily operations,
-              businesses can streamline processes and improve overall
-              performance.
-            </p>
-
-            <h2 className="text-2xl font-bold text-navy mb-4 mt-12">
-              How AI is Transforming Modern Businesses
-            </h2>
-
-            <h3 className="text-[19px] font-bold text-navy mb-2 mt-8">
-              1. Automating Repetitive Tasks
-            </h3>
-            <p className="mb-4">
-              AI-powered automation reduces the need for manual intervention in
-              routine processes such as:
-            </p>
-            <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-700">
-              <li>Data entry</li>
-              <li>Invoice processing</li>
-              <li>Customer support</li>
-              <li>Scheduling and reporting</li>
-            </ul>
-            <p className="mb-8">
-              This allows employees to focus on strategic and creative work,
-              while improving productivity and reducing operational costs.
-            </p>
-
-            <h3 className="text-[19px] font-bold text-navy mb-2 mt-8">
-              2. Enhancing Customer Experience
-            </h3>
-            <p className="mb-8">
-              Modern customers expect fast, personalized, and seamless
-              interactions. AI helps businesses deliver this through virtual
-              assistants, personalized recommendations, and automated customer
-              support. AI systems can analyze customer behavior and preferences
-              to provide highly relevant experiences that increase engagement
-              and loyalty.
-            </p>
-
-            <h3 className="text-[19px] font-bold text-navy mb-2 mt-8">
-              3. Improving Decision-Making
-            </h3>
-            <p className="mb-4">
-              Businesses generate massive amounts of data every day. AI can
-              process and analyze this information in real-time, helping leaders
-              make informed decisions based on:
-            </p>
-            <ul className="list-disc pl-6 mb-8 space-y-2 text-gray-700">
-              <li>Market trends</li>
-              <li>Customer insights</li>
-              <li>Sales forecasts</li>
-              <li>Risk assessments</li>
-            </ul>
-
-            <h2 className="text-2xl font-bold text-navy mb-4 mt-12">
-              Key Benefits of AI for Businesses
-            </h2>
-            <div className="space-y-6 mb-12">
-              <div>
-                <strong className="text-navy block mb-1">
-                  Increased Efficiency
-                </strong>
-                <span>
-                  AI automates time-consuming tasks, allowing teams to
-                  accomplish more with fewer resources.
-                </span>
-              </div>
-              <div>
-                <strong className="text-navy block mb-1">Cost Reduction</strong>
-                <span>
-                  Automated and predictive analytics help reduce operational
-                  expenses and minimize costly errors.
-                </span>
-              </div>
-              <div>
-                <strong className="text-navy block mb-1">
-                  Better Customer Satisfaction
-                </strong>
-                <span>
-                  AI enables personalized interaction and faster support,
-                  leading to improved customer experiences.
-                </span>
-              </div>
-              <div>
-                <strong className="text-navy block mb-1">
-                  Enhanced Accuracy
-                </strong>
-                <span>
-                  AI systems can process large datasets with greater precision
-                  than manual methods.
-                </span>
-              </div>
-              <div>
-                <strong className="text-navy block mb-1">
-                  Competitive Advantage
-                </strong>
-                <span>
-                  Organizations that adopt AI gain valuable insights and
-                  capabilities that help them stand out of competition.
-                </span>
-              </div>
+            
+            <div className="space-y-6">
+              {plainTextContent.split("\n\n").map((paragraph, idx) => (
+                <p key={idx} className="mb-4">
+                  {paragraph}
+                </p>
+              ))}
             </div>
-
-            <h2 className="text-2xl font-bold text-navy mb-4 mt-12">
-              Conclusion
-            </h2>
-            <p className="mb-8">
-              AI is reshaping modern businesses by automating operations,
-              enhancing customer experiences, and driving decision-making and
-              driving innovation. As AI technologies continue to advance,
-              businesses that embrace intelligently will position themselves for
-              long-term growth and success. The future belongs to organizations
-              that can effectively blend human expertise with the power of
-              artificial intelligence.
-            </p>
           </article>
         </div>
       </section>

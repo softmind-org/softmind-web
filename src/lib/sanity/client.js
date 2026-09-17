@@ -84,7 +84,35 @@ export const postBySlugQuery = `*[_type == "post" && slug.current == $slug][0] {
   ogImage
 }`;
 
-export const allSlugsQuery = `*[_type in ["post", "page"]] {
+export const caseStudiesQuery = `*[_type == "caseStudy"] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  clientName,
+  industry,
+  excerpt,
+  coverImage,
+  publishedAt,
+  seoTitle,
+  seoDescription
+}`;
+
+export const caseStudyBySlugQuery = `*[_type == "caseStudy" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  clientName,
+  industry,
+  excerpt,
+  coverImage,
+  publishedAt,
+  body,
+  seoTitle,
+  seoDescription,
+  ogImage
+}`;
+
+export const allSlugsQuery = `*[_type in ["post", "page", "caseStudy"]] {
   _type,
   "slug": slug.current,
   _updatedAt

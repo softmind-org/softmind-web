@@ -21,6 +21,7 @@ import Footer from "@/components/layout/Footer";
 import ChatbotWidget from "@/components/layout/ChatbotWidget";
 import { RouteLoader } from "@/components/customs/routeLoader";
 import { OrganizationJsonLd } from "@/components/seo/JsonLd";
+import ChatbaseWidget from "@/components/layout/ChatbaseWidget";
 
 export default function RootLayout({ children }) {
   return (
@@ -38,7 +39,8 @@ export default function RootLayout({ children }) {
         <RouteLoader />
         <main className="flex-1">{children}</main>
         <Footer />
-        <ChatbotWidget />
+        {/* <ChatbotWidget /> */}
+        <ChatbaseWidget />
       </body>
       {process.env.NEXT_PUBLIC_GA_ID && (
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />

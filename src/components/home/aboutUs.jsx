@@ -29,7 +29,7 @@ function AnimatedNumber({ value }) {
 export default function AboutUs() {
   const stats = [
     {
-      number: "80",
+      number: "60",
       label: "Engineer and consultants",
     },
     {
@@ -117,7 +117,7 @@ export default function AboutUs() {
                 faster.
               </p>
               <p>
-                Since 2021, we have provided{" "}
+                Since 2023, we have provided{" "}
                 <strong className="text-dark">
                   Custom Software Development, Mobile App Development, AI
                   Solutions, Cloud Applications, Staff Augmentation,

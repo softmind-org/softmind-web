@@ -9,7 +9,7 @@ const TRUST_STATS = [
   { value: "300+", label: "Happy Clients" },
   { value: "14+", label: "Years Experience" },
   { value: "100+", label: "Projects Shipped" },
-  { value: "80+", label: "Engineers" },
+  { value: "60+", label: "Engineers" },
 ];
 
 export default function FinalCta() {

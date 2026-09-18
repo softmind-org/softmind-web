@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSupabaseClient } from "@/lib/supabase/server";
-import { generateEmbedding, generateChatStream } from "@/lib/rag/embeddings";
+import { getSupabaseClient } from "@/backend/supabase/admin";
+import { generateEmbedding, generateChatStream } from "@/backend/rag/embeddings";
 
 export async function POST(req) {
   try {

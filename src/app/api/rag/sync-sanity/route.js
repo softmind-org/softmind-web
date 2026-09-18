@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { sanityClient, portableTextToPlainText } from "@/lib/sanity/client";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
-import { chunkText } from "@/lib/rag/chunker";
-import { generateEmbedding } from "@/lib/rag/embeddings";
+import { sanityClient, portableTextToPlainText } from "@/backend/sanity/client";
+import { getSupabaseAdmin } from "@/backend/supabase/admin";
+import { chunkText } from "@/backend/rag/chunker";
+import { generateEmbedding } from "@/backend/rag/embeddings";
 
 export async function POST(req) {
   try {

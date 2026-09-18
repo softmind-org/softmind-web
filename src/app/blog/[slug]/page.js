@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, LinkIcon, Mail } from "lucide-react";
 import { FaFacebook, FaLinkedin } from "react-icons/fa";
 import SummarizeButton from "@/components/blogsComponents/summarizeButton";
-import { safeSanityFetch, postBySlugQuery, urlFor, portableTextToPlainText } from "@/lib/sanity/client";
+import { safeSanityFetch, urlFor, portableTextToPlainText } from "@/backend/sanity/client";
+import { postBySlugQuery } from "@/backend/sanity/queries";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 const fallbackBlogPosts = {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase/server";
-import { chunkText } from "@/lib/rag/chunker";
-import { generateEmbedding } from "@/lib/rag/embeddings";
+import { getSupabaseAdmin } from "@/backend/supabase/admin";
+import { chunkText } from "@/backend/rag/chunker";
+import { generateEmbedding } from "@/backend/rag/embeddings";
 
 export async function POST(req) {
   try {

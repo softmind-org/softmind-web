@@ -1,4 +1,5 @@
-import { safeSanityFetch, allSlugsQuery } from "@/lib/sanity/client";
+import { safeSanityFetch } from "@/backend/sanity/client";
+import { allSlugsQuery } from "@/backend/sanity/queries";
 
 export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.softmindsol.com";

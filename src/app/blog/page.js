@@ -1,7 +1,8 @@
 import OurBlogs from "@/components/blogsComponents/ourBlogs";
 import FinalCta from "@/components/home/finalCta";
 import { Hero } from "@/components/home/Hero";
-import { safeSanityFetch, postsQuery, urlFor } from "@/lib/sanity/client";
+import { safeSanityFetch, urlFor } from "@/backend/sanity/client";
+import { postsQuery } from "@/backend/sanity/queries";
 
 export const metadata = {
   title: "Insights & Industry Trends | SoftMind Solutions Blog",

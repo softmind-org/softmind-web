@@ -7,10 +7,10 @@ import { ArrowLeft, Home } from "lucide-react";
 export default function NotFound() {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-white px-6 font-jakarta">
-      {/* Background glowing effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[800px] w-[800px] -z-10 rounded-full bg-navy/5 blur-3xl" />
-      <div className="absolute top-0 right-0 h-[400px] w-[400px] -translate-y-1/3 translate-x-1/3 -z-10 rounded-full bg-green/20 blur-3xl" />
-      <div className="absolute bottom-0 left-0 h-[500px] w-[500px] translate-y-1/3 -translate-x-1/3 -z-10 rounded-full bg-blue-200 blur-3xl" />
+      {/* Subtle background */}
+      <div className="absolute inset-0 opacity-[0.025] bg-[radial-gradient(#00235A_1px,transparent_1px)] bg-size-[24px_24px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-125 h-125 bg-navy rounded-full blur-[150px] opacity-20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-125 h-125 bg-green rounded-full blur-[150px] opacity-20 pointer-events-none" />
 
       <div className="flex w-full max-w-2xl flex-col items-center text-center">
         <motion.div

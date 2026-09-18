@@ -78,7 +78,9 @@ export default function Footer() {
                   </span>
                   <a
                     href="mailto:contact@softmindsol.com"
-                    onClick={() => trackEvent("email_click", { location: "footer" })}
+                    onClick={() =>
+                      trackEvent("email_click", { location: "footer" })
+                    }
                     className="text-sm font-medium leading-[18px] hover:text-[#0CBF83] transition-colors break-all"
                   >
                     contact@softmindsol.com
@@ -133,24 +135,26 @@ export default function Footer() {
             <h4 className="text-2xl font-bold tracking-wide">Services</h4>
             <ul className="space-y-3.5">
               {[
-                { name: "AI SaaS Development", path: "/services/ai-saas" },
+                {
+                  name: "AI SaaS Development",
+                  path: "/services/ai-saas-development",
+                },
                 {
                   name: "Custom Software Development",
-                  path: "/services/custom-software",
+                  path: "/services/custom-software-development",
                 },
-                { name: "Web App Development", path: "/services/web-app" },
+                {
+                  name: "Web App Development",
+                  path: "/services/web-app-development",
+                },
                 {
                   name: "Mobile App Development",
-                  path: "/services/mobile-app",
+                  path: "/services/mobile-app-development",
                 },
-                { name: "MVP Development", path: "/services/mvp" },
+                { name: "MVP Development", path: "/services/mvp-development" },
                 {
                   name: "Offshore Software Testing",
                   path: "/services/software-testing",
-                },
-                {
-                  name: "Product Design (UI/UX)",
-                  path: "/services/product-design",
                 },
               ].map((link) => (
                 <li key={link.name}>
@@ -197,7 +201,12 @@ export default function Footer() {
               <a
                 href="https://www.fiverr.com/sellers/bilalbhatti139"
                 target="_blank"
-                onClick={() => trackEvent("outbound_profile_click", { platform: "upwork", location: "footer" })}
+                onClick={() =>
+                  trackEvent("outbound_profile_click", {
+                    platform: "upwork",
+                    location: "footer",
+                  })
+                }
                 className="w-[28px] h-[28px] bg-white/5 hover:bg-white hover:text-dark border border-white/10 rounded-sm flex items-center justify-center transition-colors"
               >
                 <FaUpwork className="size-4.5 pt-0.5" />
@@ -206,7 +215,12 @@ export default function Footer() {
               <a
                 href="https://www.fiverr.com/sellers/bilalbhatti139"
                 target="_blank"
-                onClick={() => trackEvent("outbound_profile_click", { platform: "fiverr", location: "footer" })}
+                onClick={() =>
+                  trackEvent("outbound_profile_click", {
+                    platform: "fiverr",
+                    location: "footer",
+                  })
+                }
                 className="w-[28px] h-[28px] bg-white/5 hover:bg-green border border-white/10 rounded-sm flex items-center justify-center transition-colors"
               >
                 <TbBrandFiverr className="size-4.5" />

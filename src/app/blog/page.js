@@ -32,25 +32,32 @@ export default async function Blogs() {
         id: post._id || idx + 1,
         title: post.title,
         description: post.excerpt || "Read more about this article...",
-        image: urlFor(post.coverImage)?.url() || "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80",
-        time: post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : "Recent",
+        image:
+          urlFor(post.coverImage)?.url() ||
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80",
+        time: post.publishedAt
+          ? new Date(post.publishedAt).toLocaleDateString()
+          : "Recent",
         outcomes: "Outcomes",
         slug: post.slug,
       }));
     }
   } catch (err) {
-    console.warn("Sanity posts fetch warning (using default posts fallback):", err.message);
+    console.warn(
+      "Sanity posts fetch warning (using default posts fallback):",
+      err.message,
+    );
   }
 
   return (
     <main className="w-full flex flex-col items-center">
       <Hero
-        title="Insights, Ideas &"
+        title="Ideas That Build"
         typewriterPrefix=""
-        typewriterPhrases={["Industry Trends"]}
-        description="Stay updated with expert perspectives, practical tips, and the latest industry trends. Explore articles designed to help you learn, grow, and make informed decisions."
-        primaryButtonText="Start a Project"
-        primaryButtonLink="/contact"
+        typewriterPhrases={["Better Technology"]}
+        description="Expert insights on AI, software, products, and digital transformation—made practical for modern businesses."
+        primaryButtonText="Explore Insights"
+        primaryButtonLink="/blog"
         secondaryButtonText={null}
         showBottomText={false}
       />

@@ -332,7 +332,6 @@ export default function OurWork() {
     },
   ];
 
-  // Optional Page 2 Mockups to demonstrate slider rotation functionality
   const page2Items = page1Items
     .map((item) => ({
       ...item,
@@ -361,9 +360,9 @@ export default function OurWork() {
 
       <div className="relative mx-auto px-6 md:px-12">
         {/* Top Header Layout */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between items-center lg:items-start gap-8 mb-[47px] text-center lg:text-left">
+        <div className="flex flex-col items-center justify-center gap-8 mb-[47px] text-center ">
           {/* Label and Section Title */}
-          <div className="flex flex-col items-center lg:items-start gap-3.5 max-w-[531px] mx-auto lg:mx-0">
+          <div className="flex flex-col items-center justify-center gap-3.5 max-w-[631px] mx-auto">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[linear-gradient(104.04deg,#00235A_8.33%,#004BC0_93.33%)]" />
               <span className="text-green text-[22px] font-bold tracking-[1px] leading-[28px]">
@@ -371,15 +370,23 @@ export default function OurWork() {
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-[46px] lg:leading-[58px] font-bold tracking-[1px] text-white capitalize">
-              14+ Years Exp But Countless Innovations
+              14+ Years Exp But{" "}
+              <span className="bg-gradient-to-r from-green via-blue-500 to-blue-700 bg-clip-text text-transparent">
+                Countless Innovations
+              </span>
             </h2>
+            <p className="text-white/80 text-base md:text-lg leading-relaxed mt-1">
+              Real projects. Real challenges. Real outcomes. Explore how
+              Softmind helps businesses simplify complexity, improve
+              experiences, and build products that are ready to scale.
+            </p>
           </div>
 
           {/* Action Row: Categories and Carousel Nav Controls */}
-          <div className="flex flex-col md:flex-row md:items-center gap-8 self-stretch lg:self-end justify-between md:justify-start">
+          <div className="flex flex-col md:flex-row md:items-center gap-8 self-stretch justify-center md:justify-between">
             {/* Category Filter Tabs with dynamic green indicator underneath */}
             <div className="relative border-b border-white/10 w-full md:w-[468px]">
-              <div className="flex justify-start md:justify-start gap-6 overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -mb-[1.7px]">
+              <div className="flex justify-center md:justify-center gap-6 overflow-y-hidden overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] -mb-[1.7px]">
                 {categories.map((cat) => {
                   const isActive = activeCategory === cat;
                   return (
@@ -389,7 +396,7 @@ export default function OurWork() {
                       className={`text-sm tracking-[1px] pb-2 whitespace-nowrap transition-all duration-300 relative ${
                         isActive
                           ? "text-white font-bold"
-                          : "text-white/60 font-medium hover:text-white"
+                          : "text-white/60 font-medium hover:text-white cursor-pointer"
                       }`}
                     >
                       {cat}

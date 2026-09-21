@@ -1,4 +1,5 @@
 import ContactForm from "@/components/contactUsComponents/ContactForm";
+import ContactFormSection from "@/components/home/contactFormSection";
 import { Hero } from "@/components/home/Hero";
 import OurWork from "@/components/home/ourWork";
 
@@ -11,17 +12,17 @@ const CaseStudies = () => {
   return (
     <main className="w-full flex flex-col items-center">
       <Hero
-        title="Work That Speaks"
+        title="We Build Solutions That Move"
         typewriterPrefix=""
-        typewriterPhrases={["For Itself"]}
-        description="A showcase of high-performing digital products, platforms, and experiences built to transform ideas into successful businesses."
+        typewriterPhrases={["Businesses Forward"]}
+        description="From complex ideas to market-ready products, see how we solve real business challenges with technology that delivers measurable value."
         primaryButtonText="Start a Project"
-        primaryButtonLink="/contact"
+        primaryButtonLink="/contact-us"
         secondaryButtonText={null}
         showBottomText={false}
       />
       <OurWork />
-      <ContactForm />
+      <ContactFormSection />
     </main>
   );
 };

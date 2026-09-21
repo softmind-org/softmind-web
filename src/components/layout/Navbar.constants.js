@@ -20,6 +20,6 @@ export const NAV_ITEMS = [
   { label: "About Us", href: "/about-us" },
   { label: "Services", hasDropdown: true, dropdownType: "services" },
   { label: "Industries", hasDropdown: true, dropdownType: "industries" },
-  // { label: "Case Studies", href: "/case-studies" },
+  { label: "Case Studies", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
 ];

@@ -26,32 +26,24 @@ export const postBySlugQuery = `*[_type == "post" && slug.current == $slug][0] {
   ogImage
 }`;
 
-export const caseStudiesQuery = `*[_type == "caseStudy"] | order(publishedAt desc) {
+// Fetches all case studies for the listing page (card data only — no section content needed)
+export const caseStudiesQuery = `*[_type == "caseStudy"] | order(_createdAt desc) {
   _id,
   title,
   "slug": slug.current,
-  clientName,
-  industry,
-  excerpt,
-  coverImage,
-  publishedAt,
-  seoTitle,
-  seoDescription
+  clientName
 }`;
 
+// Fetches a single case study by slug — all fields needed by the detail page
 export const caseStudyBySlugQuery = `*[_type == "caseStudy" && slug.current == $slug][0] {
   _id,
   title,
   "slug": slug.current,
   clientName,
-  industry,
-  excerpt,
-  coverImage,
-  publishedAt,
-  body,
-  seoTitle,
-  seoDescription,
-  ogImage,
+  // Three named preview sections (plain text)
+  overview,
+  challenge,
+  solution,
   // Resolve the PDF asset URL so the Download button can link directly
   pdfFile { asset->{ url } }
 }`;

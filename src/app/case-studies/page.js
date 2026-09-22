@@ -28,10 +28,9 @@ const CaseStudies = async () => {
       sanityStudies = raw.map((cs) => ({
         id: cs._id,
         title: cs.title,
-        slug: cs.slug, // slug.current — already projected as a string in the query
+        // slug.current is already projected as a plain string by caseStudiesQuery
+        slug: cs.slug,
         clientName: cs.clientName,
-        industry: cs.industry,
-        excerpt: cs.excerpt,
       }));
     }
   } catch (err) {

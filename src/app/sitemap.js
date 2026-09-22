@@ -43,7 +43,13 @@ export default async function sitemap() {
     const sanitySlugs = await safeSanityFetch(allSlugsQuery);
     if (Array.isArray(sanitySlugs)) {
       sanityRoutes = sanitySlugs.map((item) => {
-        const path = item._type === "post" ? `/blog/${item.slug}` : `/${item.slug}`;
+        // Route each document type to its canonical URL prefix
+        const path =
+          item._type === "post"
+            ? `/blog/${item.slug}`
+            : item._type === "caseStudy"
+              ? `/case-studies/${item.slug}`
+              : `/${item.slug}`;
         return {
           url: `${baseUrl}${path}`,
           lastModified: item._updatedAt || new Date().toISOString(),

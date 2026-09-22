@@ -51,7 +51,14 @@ export const caseStudyBySlugQuery = `*[_type == "caseStudy" && slug.current == $
   body,
   seoTitle,
   seoDescription,
-  ogImage
+  ogImage,
+  // Resolve the PDF asset URL so the Download button can link directly
+  pdfFile { asset->{ url } }
+}`;
+
+// Used by generateStaticParams() to pre-render all case study slug pages at build time
+export const caseStudySlugsQuery = `*[_type == "caseStudy" && defined(slug.current)] {
+  "slug": slug.current
 }`;
 
 export const allSlugsQuery = `*[_type in ["post", "page", "caseStudy"]] {

@@ -1,10 +1,19 @@
 "use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState, useRef } from "react";
 import { SoftMindSolutionLogo } from "../../../public/images";
 
-export default function OurWork() {
+/**
+ * OurWork — Portfolio / Case Studies carousel section.
+ *
+ * @param {Object[]} [caseStudies]  Optional array of Sanity case study objects.
+ *   Each entry may include { id, title, slug, renderMockup } so that the card
+ *   becomes a clickable link to /case-studies/[slug].  When omitted (homepage),
+ *   the component falls back to its own static demo items — no regression.
+ */
+export default function OurWork({ caseStudies }) {
   const [activeCategory, setActiveCategory] = useState("Health Care");
   const [currentPage, setCurrentPage] = useState(0);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
@@ -442,38 +451,63 @@ export default function OurWork() {
             {/* Page 1 slide container */}
             <div className="w-full shrink-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[23px] gap-y-[29px] w-full">
-                {page1Items.map((item) => (
-                  <div key={item.id} className="flex flex-col">
-                    {/* Visual Card (Matching Aspect Ratio 414px * 373px) */}
-                    <div className="w-full aspect-[414/373] rounded-xl overflow-hidden relative border border-white/[0.04] mb-[20px] shadow-lg">
-                      {item.renderMockup()}
-                    </div>
-                    {/* Visual Label (Identical weight and sizes) */}
-                    <h3
-                      className={`${item.fontClass} text-[22px] leading-[29px] font-bold tracking-[1px] text-white`}
-                    >
-                      {item.title}
-                    </h3>
-                  </div>
-                ))}
+                {page1Items.map((item) => {
+                  // Find matching Sanity case study by id to obtain its slug
+                  const sanityMatch = caseStudies?.find((cs) => cs.id === item.id);
+                  const slug = sanityMatch?.slug || item.slug || null;
+                  const CardWrapper = ({ children }) =>
+                    slug ? (
+                      <Link href={`/case-studies/${slug}`} className="flex flex-col group">
+                        {children}
+                      </Link>
+                    ) : (
+                      <div className="flex flex-col">{children}</div>
+                    );
+                  return (
+                    <CardWrapper key={item.id}>
+                      {/* Visual Card (Matching Aspect Ratio 414px * 373px) */}
+                      <div className="w-full aspect-[414/373] rounded-xl overflow-hidden relative border border-white/[0.04] mb-[20px] shadow-lg group-hover:border-white/10 transition-colors">
+                        {item.renderMockup()}
+                      </div>
+                      {/* Visual Label (Identical weight and sizes) */}
+                      <h3
+                        className={`${item.fontClass} text-[22px] leading-[29px] font-bold tracking-[1px] text-white ${slug ? "group-hover:text-green transition-colors" : ""}`}
+                      >
+                        {item.title}
+                      </h3>
+                    </CardWrapper>
+                  );
+                })}
               </div>
             </div>
 
             {/* Page 2 slide container */}
             <div className="w-full shrink-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[23px] gap-y-[29px] w-full">
-                {page2Items.map((item) => (
-                  <div key={item.id} className="flex flex-col">
-                    <div className="w-full aspect-[414/373] rounded-xl overflow-hidden relative border border-white/[0.04] mb-[20px] shadow-lg">
-                      {item.renderMockup()}
-                    </div>
-                    <h3
-                      className={`${item.fontClass} text-[22px] leading-[29px] font-bold tracking-[1px] text-white`}
-                    >
-                      {item.title}
-                    </h3>
-                  </div>
-                ))}
+                {page2Items.map((item) => {
+                  const sanityMatch = caseStudies?.find((cs) => cs.id === item.id);
+                  const slug = sanityMatch?.slug || item.slug || null;
+                  const CardWrapper = ({ children }) =>
+                    slug ? (
+                      <Link href={`/case-studies/${slug}`} className="flex flex-col group">
+                        {children}
+                      </Link>
+                    ) : (
+                      <div className="flex flex-col">{children}</div>
+                    );
+                  return (
+                    <CardWrapper key={item.id}>
+                      <div className="w-full aspect-[414/373] rounded-xl overflow-hidden relative border border-white/[0.04] mb-[20px] shadow-lg group-hover:border-white/10 transition-colors">
+                        {item.renderMockup()}
+                      </div>
+                      <h3
+                        className={`${item.fontClass} text-[22px] leading-[29px] font-bold tracking-[1px] text-white ${slug ? "group-hover:text-green transition-colors" : ""}`}
+                      >
+                        {item.title}
+                      </h3>
+                    </CardWrapper>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -486,14 +520,27 @@ export default function OurWork() {
             onScroll={handleMobileScroll}
             className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full gap-5"
           >
-            {activePageItems.map((item) => (
-              <div key={item.id} className="w-full shrink-0 snap-center">
-                {/* Visual Card (Matching Aspect Ratio 414px * 373px) with rounded-3xl corners */}
-                <div className="w-full aspect-[414/373] rounded-3xl overflow-hidden relative border border-white/[0.04] shadow-lg">
-                  {item.renderMockup()}
-                </div>
-              </div>
-            ))}
+            {activePageItems.map((item) => {
+              const sanityMatch = caseStudies?.find((cs) => cs.id === item.id);
+              const slug = sanityMatch?.slug || item.slug || null;
+              // Mobile: wrap entire snap-card in Link when slug is available
+              const MobileWrapper = ({ children }) =>
+                slug ? (
+                  <Link href={`/case-studies/${slug}`} className="w-full shrink-0 snap-center block">
+                    {children}
+                  </Link>
+                ) : (
+                  <div className="w-full shrink-0 snap-center">{children}</div>
+                );
+              return (
+                <MobileWrapper key={item.id}>
+                  {/* Visual Card (Matching Aspect Ratio 414px * 373px) with rounded-3xl corners */}
+                  <div className="w-full aspect-[414/373] rounded-3xl overflow-hidden relative border border-white/[0.04] shadow-lg">
+                    {item.renderMockup()}
+                  </div>
+                </MobileWrapper>
+              );
+            })}
           </div>
 
           {/* Active Card Title & Pagination Dots Footer */}

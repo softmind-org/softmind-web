@@ -70,6 +70,18 @@ export const caseStudy = {
         },
       ],
     },
+    // Downloadable PDF — uploaded per case study; powers the "Download Case Study" button
+    {
+      name: "pdfFile",
+      title: "Downloadable PDF",
+      type: "file",
+      options: {
+        // Restrict the Sanity Studio file picker to PDF files only
+        accept: "application/pdf",
+      },
+      description:
+        "Upload the complete case study PDF. The Download button on the detail page will appear only when this file is present.",
+    },
     // Technical SEO fields
     {
       name: "seoTitle",

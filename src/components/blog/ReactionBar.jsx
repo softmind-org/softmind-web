@@ -1,138 +1,149 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sparkles, Heart, ThumbsUp, Lightbulb, PartyPopper, Rocket } from "lucide-react";
+import { Sparkles, Check } from "lucide-react";
 
 const REACTIONS = [
-  { id: "like", label: "Like", emoji: "👍", Icon: ThumbsUp, color: "text-blue-600 bg-blue-50 border-blue-200" },
-  { id: "love", label: "Love", emoji: "❤️", Icon: Heart, color: "text-rose-600 bg-rose-50 border-rose-200" },
-  { id: "insightful", label: "Insightful", emoji: "💡", Icon: Lightbulb, color: "text-amber-600 bg-amber-50 border-amber-200" },
-  { id: "celebrate", label: "Celebrate", emoji: "🎉", Icon: PartyPopper, color: "text-purple-600 bg-purple-50 border-purple-200" },
-  { id: "rocket", label: "Rocket", emoji: "🚀", Icon: Rocket, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
+  {
+    id: "not_useful",
+    label: "Not useful",
+    emoji: "😞",
+    activeClass:
+      "bg-rose-50 text-rose-800 border-rose-300 ring-2 ring-rose-200/50 shadow-xs",
+    hoverBorder: "hover:border-rose-300 hover:bg-rose-50/50",
+  },
+  {
+    id: "okay",
+    label: "It was okay",
+    emoji: "😐",
+    activeClass:
+      "bg-amber-50 text-amber-900 border-amber-300 ring-2 ring-amber-200/50 shadow-xs",
+    hoverBorder: "hover:border-amber-300 hover:bg-amber-50/50",
+  },
+  {
+    id: "helpful",
+    label: "Helpful",
+    emoji: "🙂",
+    activeClass:
+      "bg-emerald-50 text-emerald-950 border-green ring-2 ring-green/25 shadow-xs font-semibold",
+    hoverBorder: "hover:border-green hover:bg-emerald-50/40",
+  },
+  {
+    id: "very_helpful",
+    label: "Very helpful",
+    emoji: "😍",
+    activeClass:
+      "bg-emerald-50 text-emerald-950 border-green ring-2 ring-green/30 shadow-xs font-semibold",
+    hoverBorder: "hover:border-green hover:bg-emerald-50/40",
+  },
 ];
 
 export default function ReactionBar({ slug = "blog-detail" }) {
-  const [counts, setCounts] = useState({
-    like: 14,
-    love: 9,
-    insightful: 23,
-    celebrate: 6,
-    rocket: 18,
-  });
-  const [userReactions, setUserReactions] = useState({});
+  const [selectedReaction, setSelectedReaction] = useState(null);
   const [animatingId, setAnimatingId] = useState(null);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
 
-  // Load reaction counts and active user states from localStorage
   useEffect(() => {
     if (!slug) return;
 
-    // Load active state from localStorage
+    // Read stored user reaction from localStorage
     try {
       const stored = localStorage.getItem(`softmind_reactions_${slug}`);
       if (stored) {
-        setUserReactions(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        const activeKey = Object.keys(parsed).find((k) => parsed[k] === true);
+        if (activeKey) {
+          setSelectedReaction(activeKey);
+          setFeedbackSubmitted(true);
+        }
       }
     } catch (e) {
       console.warn("Could not read localStorage for reactions", e);
     }
-
-    // Fetch live counts from API (Supabase)
-    fetch(`/api/reactions?slug=${encodeURIComponent(slug)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.counts) {
-          setCounts((prev) => ({ ...prev, ...data.counts }));
-        }
-      })
-      .catch((err) => console.warn("Failed to fetch reactions", err));
   }, [slug]);
 
-  const handleToggleReaction = async (reactionId) => {
-    const isCurrentlyActive = !!userReactions[reactionId];
-    const delta = isCurrentlyActive ? -1 : 1;
+  const handleSelectReaction = async (reactionId) => {
+    const isSame = selectedReaction === reactionId;
+    const previousReaction = selectedReaction;
 
-    // Trigger bounce animation
+    // Trigger micro-bounce
     setAnimatingId(reactionId);
-    setTimeout(() => setAnimatingId(null), 400);
+    setTimeout(() => setAnimatingId(null), 350);
 
-    // Optimistic UI updates
-    const updatedUserReactions = {
-      ...userReactions,
-      [reactionId]: !isCurrentlyActive,
-    };
-    setUserReactions(updatedUserReactions);
-
-    setCounts((prev) => ({
-      ...prev,
-      [reactionId]: Math.max(0, (prev[reactionId] || 0) + delta),
-    }));
+    const nextSelection = isSame ? null : reactionId;
+    setSelectedReaction(nextSelection);
+    setFeedbackSubmitted(!isSame);
 
     // Save to localStorage
     try {
-      localStorage.setItem(
-        `softmind_reactions_${slug}`,
-        JSON.stringify(updatedUserReactions)
-      );
+      const storeObj = nextSelection ? { [nextSelection]: true } : {};
+      localStorage.setItem(`softmind_reactions_${slug}`, JSON.stringify(storeObj));
     } catch (e) {
       console.warn("Could not save to localStorage", e);
     }
 
-    // Sync to Supabase via API route
+    // Sync in background to Supabase
     try {
-      await fetch("/api/reactions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, reactionType: reactionId, delta }),
-      });
+      if (previousReaction) {
+        fetch("/api/reactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug, reactionType: previousReaction, delta: -1 }),
+        });
+      }
+      if (nextSelection) {
+        fetch("/api/reactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug, reactionType: nextSelection, delta: 1 }),
+        });
+      }
     } catch (err) {
       console.warn("Reaction sync error:", err);
     }
   };
 
-  const totalReactions = Object.values(counts).reduce((a, b) => a + b, 0);
-
   return (
-    <section className="w-full my-12 font-jakarta" aria-label="Article reactions">
-      <div className="bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] border border-gray-200/80 rounded-2xl md:rounded-3xl p-6 sm:p-8 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h3 className="text-lg font-bold text-navy flex items-center gap-2">
-              <span>What did you think of this article?</span>
-              <Sparkles className="w-4 h-4 text-green" />
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-500 font-medium mt-0.5">
-              Let us know your thoughts · {totalReactions} readers reacted
-            </p>
-          </div>
+    <section
+      className="w-full my-8 font-jakarta"
+      aria-label="Article feedback"
+    >
+      <div className="bg-[#F8FAFC] border border-gray-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
+          <h3 className="text-[15px] sm:text-base font-bold text-navy flex items-center gap-2">
+            <span>How did you like this blog?</span>
+            <Sparkles className="w-3.5 h-3.5 text-green" />
+          </h3>
 
-          <span className="self-start sm:self-auto text-xs font-semibold px-3 py-1 rounded-full bg-white border border-gray-200 text-gray-600 shadow-xs">
-            SoftMind Reactions
-          </span>
+          {feedbackSubmitted && (
+            <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full self-start sm:self-auto">
+              <Check className="w-3 h-3 text-green stroke-[3]" />
+              Thanks for your feedback!
+            </span>
+          )}
         </div>
 
-        {/* Reaction Buttons Grid / Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        {/* Compact Reaction Buttons: Only Emoji & Label */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
           {REACTIONS.map((item) => {
-            const isActive = !!userReactions[item.id];
+            const isSelected = selectedReaction === item.id;
             const isBouncing = animatingId === item.id;
-            const count = counts[item.id] || 0;
 
             return (
               <button
                 key={item.id}
-                onClick={() => handleToggleReaction(item.id)}
-                className={`group flex items-center justify-center gap-2.5 px-3.5 py-3 rounded-xl border font-medium text-sm transition-all duration-300 ${
-                  isActive
-                    ? `${item.color} shadow-sm font-bold scale-102 ring-2 ring-offset-1 ring-green/20`
-                    : "bg-white hover:bg-gray-50/80 border-gray-200 text-gray-700 hover:border-gray-300 hover:shadow-xs"
-                } ${isBouncing ? "scale-115 transition-transform" : ""}`}
+                type="button"
+                onClick={() => handleSelectReaction(item.id)}
+                className={`group flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-xs sm:text-[13px] font-medium transition-all duration-200 cursor-pointer select-none ${
+                  isSelected
+                    ? `${item.activeClass} scale-[1.02]`
+                    : `bg-white border-gray-200 text-gray-700 hover:text-navy ${item.hoverBorder} hover:shadow-xs`
+                } ${isBouncing ? "scale-105 transition-transform" : ""}`}
               >
-                <span className="text-xl leading-none group-hover:scale-120 transition-transform duration-200">
+                <span className="text-lg leading-none transition-transform duration-200 group-hover:scale-115">
                   {item.emoji}
                 </span>
-                <span className="font-semibold text-xs sm:text-sm">
-                  {count}
-                </span>
+                <span className="truncate">{item.label}</span>
               </button>
             );
           })}

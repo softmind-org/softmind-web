@@ -190,7 +190,12 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
   return (
     <article className="w-full text-gray-800 font-jakarta leading-relaxed max-w-none">
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        EdTech partner rankings go wrong when they compare fundamentally different purchases as though they were interchangeable. Finding the right software engineering partner is not just about raw headcount — it requires specialized domain mastery in LMS ecosystems, adaptive learning algorithms, SCORM/LTI compliance, and high-concurrency cloud architectures.
+        EdTech partner rankings go wrong when they compare fundamentally
+        different purchases as though they were interchangeable. Finding the
+        right software engineering partner is not just about raw headcount — it
+        requires specialized domain mastery in LMS ecosystems, adaptive learning
+        algorithms, SCORM/LTI compliance, and high-concurrency cloud
+        architectures.
       </p>
 
       {/* Major Section 1 */}
@@ -201,13 +206,19 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         What Counts As An EdTech Technology Partner
       </h2>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        An EdTech technology partner is not simply a generic IT staff augmentation firm. They understand the distinct compliance requirements of student privacy (FERPA, COPPA, GDPR-K), learning analytics standards (xAPI, Caliper), and the asynchronous workflows needed for digital learning platforms.
+        An EdTech technology partner is not simply a generic IT staff
+        augmentation firm. They understand the distinct compliance requirements
+        of student privacy (FERPA, COPPA, GDPR-K), learning analytics standards
+        (xAPI, Caliper), and the asynchronous workflows needed for digital
+        learning platforms.
       </p>
 
       {/* Bold inline stat callout */}
       <div className="my-6 p-4 rounded-xl bg-gray-50 border border-gray-200 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-jakarta">
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 font-medium">Domain Specialization:</span>
+          <span className="text-gray-500 font-medium">
+            Domain Specialization:
+          </span>
           <span className="font-bold text-navy bg-white px-2.5 py-0.5 rounded border border-gray-200">
             Strong (14+ Yrs)
           </span>
@@ -219,13 +230,18 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500 font-medium">Security & Compliance:</span>
+          <span className="text-gray-500 font-medium">
+            Security & Compliance:
+          </span>
           <span className="font-bold text-navy">FERPA / SOC-2 Type II</span>
         </div>
       </div>
 
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        When evaluating potential partners, engineering leaders must assess both architectural capability and domain depth. A partner should be able to design multi-tenant architectures, optimize video streaming latency, and build intelligent assessment engines.
+        When evaluating potential partners, engineering leaders must assess both
+        architectural capability and domain depth. A partner should be able to
+        design multi-tenant architectures, optimize video streaming latency, and
+        build intelligent assessment engines.
       </p>
 
       {/* Major Section 2 */}
@@ -236,7 +252,10 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         How We Scored These Education Technology Partners
       </h2>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        Our scoring matrix evaluates engineering organizations across four key pillars: architectural depth, compliance readiness, dedicated senior talent retention, and historical proof of delivery in high-scale EdTech environments.
+        Our scoring matrix evaluates engineering organizations across four key
+        pillars: architectural depth, compliance readiness, dedicated senior
+        talent retention, and historical proof of delivery in high-scale EdTech
+        environments.
       </p>
 
       {/* Data Comparison Table */}
@@ -244,36 +263,68 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         <table className="w-full text-left text-sm font-jakarta border-collapse">
           <thead className="bg-[#F8FAFC] border-b border-gray-200 text-navy">
             <tr>
-              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">Evaluation Criteria</th>
-              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">Weight</th>
-              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">Benchmark Expectation</th>
-              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">SoftMind Capability</th>
+              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">
+                Evaluation Criteria
+              </th>
+              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">
+                Weight
+              </th>
+              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">
+                Benchmark Expectation
+              </th>
+              <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">
+                SoftMind Capability
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
             <tr className="hover:bg-gray-50/60 transition-colors">
-              <td className="px-5 py-3.5 font-bold text-navy">LMS & Open edX Architecture</td>
+              <td className="px-5 py-3.5 font-bold text-navy">
+                LMS & Open edX Architecture
+              </td>
               <td className="px-5 py-3.5 text-gray-600 font-semibold">30%</td>
-              <td className="px-5 py-3.5 text-gray-600">Custom theme, LTI v1.3 tools, micro-frontends</td>
-              <td className="px-5 py-3.5 text-green font-bold">Deep Production Experience</td>
+              <td className="px-5 py-3.5 text-gray-600">
+                Custom theme, LTI v1.3 tools, micro-frontends
+              </td>
+              <td className="px-5 py-3.5 text-green font-bold">
+                Deep Production Experience
+              </td>
             </tr>
             <tr className="hover:bg-gray-50/60 transition-colors">
-              <td className="px-5 py-3.5 font-bold text-navy">AI-Driven Adaptive Learning</td>
+              <td className="px-5 py-3.5 font-bold text-navy">
+                AI-Driven Adaptive Learning
+              </td>
               <td className="px-5 py-3.5 text-gray-600 font-semibold">25%</td>
-              <td className="px-5 py-3.5 text-gray-600">RAG agents, vector databases, LLM guardrails</td>
-              <td className="px-5 py-3.5 text-green font-bold">Full AI Stack & Model Tuning</td>
+              <td className="px-5 py-3.5 text-gray-600">
+                RAG agents, vector databases, LLM guardrails
+              </td>
+              <td className="px-5 py-3.5 text-green font-bold">
+                Full AI Stack & Model Tuning
+              </td>
             </tr>
             <tr className="hover:bg-gray-50/60 transition-colors">
-              <td className="px-5 py-3.5 font-bold text-navy">Scale & High Concurrency</td>
+              <td className="px-5 py-3.5 font-bold text-navy">
+                Scale & High Concurrency
+              </td>
               <td className="px-5 py-3.5 text-gray-600 font-semibold">25%</td>
-              <td className="px-5 py-3.5 text-gray-600">50k+ concurrent active test takers</td>
-              <td className="px-5 py-3.5 text-green font-bold">Autoscaling Cloud Architectures</td>
+              <td className="px-5 py-3.5 text-gray-600">
+                50k+ concurrent active test takers
+              </td>
+              <td className="px-5 py-3.5 text-green font-bold">
+                Autoscaling Cloud Architectures
+              </td>
             </tr>
             <tr className="hover:bg-gray-50/60 transition-colors">
-              <td className="px-5 py-3.5 font-bold text-navy">Data Privacy & FERPA</td>
+              <td className="px-5 py-3.5 font-bold text-navy">
+                Data Privacy & FERPA
+              </td>
               <td className="px-5 py-3.5 text-gray-600 font-semibold">20%</td>
-              <td className="px-5 py-3.5 text-gray-600">Encrypted PII at rest, audit logging</td>
-              <td className="px-5 py-3.5 text-green font-bold">End-to-End Enterprise Compliance</td>
+              <td className="px-5 py-3.5 text-gray-600">
+                Encrypted PII at rest, audit logging
+              </td>
+              <td className="px-5 py-3.5 text-green font-bold">
+                End-to-End Enterprise Compliance
+              </td>
             </tr>
           </tbody>
         </table>
@@ -287,7 +338,8 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         The 10 Best EdTech Partners In 2026
       </h2>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        Below is our analysis of the top specialized software partners capable of executing complex education technology roadmaps in 2026.
+        Below is our analysis of the top specialized software partners capable
+        of executing complex education technology roadmaps in 2026.
       </p>
 
       {/* Subsection 3.1 */}
@@ -298,14 +350,20 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         1. SoftMind Solutions — AI-Native EdTech & Cloud Platforms
       </h3>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        SoftMind Solutions combines 14+ years of enterprise engineering excellence with cutting-edge Generative AI and adaptive learning systems. With a dedicated bench of senior full-stack and machine learning engineers, SoftMind builds high-throughput LMS architectures, interactive course builders, and intelligent student coaching bots.
+        SoftMind Solutions combines 14+ years of enterprise engineering
+        excellence with cutting-edge Generative AI and adaptive learning
+        systems. With a dedicated bench of senior full-stack and machine
+        learning engineers, SoftMind builds high-throughput LMS architectures,
+        interactive course builders, and intelligent student coaching bots.
       </p>
 
       {/* Pull Quote */}
-      <blockquote className="my-8 relative rounded-2xl bg-gradient-to-r from-emerald-50/70 to-teal-50/40 p-6 md:p-8 border-l-4 border-green text-navy font-medium shadow-xs">
+      <blockquote className="my-8 relative rounded-2xl bg-gradient-to-r from-emerald-50/70 to-teal-50/40 p-6 md:p-8 border-y border-r border-l-4 border-green text-navy font-medium shadow-xs">
         <Quote className="w-8 h-8 text-green/40 mb-2" />
         <div className="text-lg md:text-xl italic font-serif leading-relaxed text-navy">
-          &ldquo;SoftMind&apos;s team delivered our adaptive assessment engine 40% faster than internal projections, enabling us to support over 120,000 active students seamlessly.&rdquo;
+          &ldquo;SoftMind&apos;s team delivered our adaptive assessment engine
+          40% faster than internal projections, enabling us to support over
+          120,000 active students seamlessly.&rdquo;
         </div>
         <div className="mt-3 text-sm font-semibold text-gray-600">
           — VP of Engineering, Tier-1 EdTech SaaS
@@ -320,7 +378,9 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
             <span>Best for:</span>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed font-medium">
-            Fast-growing EdTech companies and enterprise learning teams needing dedicated, senior AI/LMS developers to ship custom features, scale infrastructure, and integrate agentic workflows.
+            Fast-growing EdTech companies and enterprise learning teams needing
+            dedicated, senior AI/LMS developers to ship custom features, scale
+            infrastructure, and integrate agentic workflows.
           </p>
         </div>
 
@@ -330,7 +390,8 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
             <span>Less suited for:</span>
           </div>
           <p className="text-sm text-gray-700 leading-relaxed font-medium">
-            Organizations looking for off-the-shelf, no-code templates without custom engineering requirements or enterprise integrations.
+            Organizations looking for off-the-shelf, no-code templates without
+            custom engineering requirements or enterprise integrations.
           </p>
         </div>
       </div>
@@ -343,7 +404,9 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         2. Enterprise Scale Cloud & Open edX Integrations
       </h3>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        When scaling educational platforms to millions of users, distributed micro-frontend frameworks, Redis caching strategies, and automated grading pipelines become mission critical.
+        When scaling educational platforms to millions of users, distributed
+        micro-frontend frameworks, Redis caching strategies, and automated
+        grading pipelines become mission critical.
       </p>
 
       {/* Major Section 4 */}
@@ -354,7 +417,10 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         Which EdTech Partner Fits What You Are Building
       </h2>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        Selecting the right engineering team depends on your platform lifecycle stage. For greenfield MVP builds, prioritize speed-to-market and modern React/Next.js frameworks. For legacy modernizations, prioritize database partitioning and zero-downtime migration expertise.
+        Selecting the right engineering team depends on your platform lifecycle
+        stage. For greenfield MVP builds, prioritize speed-to-market and modern
+        React/Next.js frameworks. For legacy modernizations, prioritize database
+        partitioning and zero-downtime migration expertise.
       </p>
 
       {/* Major Section 5 */}
@@ -365,7 +431,10 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
         How To Evaluate An EdTech Partner That Is Not On This List
       </h2>
       <p className="text-[17px] leading-[1.85] text-gray-700 mb-6">
-        Always insist on interviewing the specific developers who will be assigned to your account. Review their Github history, assess their problem-solving approaches to concurrency bottlenecks, and verify their references with previous EdTech product leads.
+        Always insist on interviewing the specific developers who will be
+        assigned to your account. Review their Github history, assess their
+        problem-solving approaches to concurrency bottlenecks, and verify their
+        references with previous EdTech product leads.
       </p>
     </article>
   );

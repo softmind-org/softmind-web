@@ -1,37 +1,143 @@
 import React from "react";
-import Link from "next/link";
-import { ArrowLeft, LinkIcon, Mail } from "lucide-react";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
-import SummarizeButton from "@/components/blogsComponents/summarizeButton";
-import { safeSanityFetch, urlFor, portableTextToPlainText } from "@/backend/sanity/client";
-import { postBySlugQuery } from "@/backend/sanity/queries";
+import {
+  safeSanityFetch,
+  urlFor,
+  portableTextToPlainText,
+} from "@/backend/sanity/client";
+import { postBySlugQuery, postsQuery } from "@/backend/sanity/queries";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import BlogHeader from "@/components/blog/BlogHeader";
+import AuthorMeta from "@/components/blog/AuthorMeta";
+import BlogHero from "@/components/blog/BlogHero";
+import TableOfContents from "@/components/blog/TableOfContents";
+import ArticleBody, { slugify } from "@/components/blog/ArticleBody";
+import ReactionBar from "@/components/blog/ReactionBar";
+import BlogSidebar from "@/components/blog/BlogSidebar";
+import RelatedPosts from "@/components/blog/RelatedPosts";
+import BlogFooterCta from "@/components/blog/BlogFooterCta";
 
 const fallbackBlogPosts = {
+  "top-edtech-technology-partners-2026": {
+    title: "Top 10 Education Technology Partners in 2026",
+    category: "Insights / EdTech",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80",
+    date: "September 21, 2026",
+    readTime: "19-20 Min Read",
+    author: "SoftMind Editorial Team",
+    excerpt:
+      "Explore the definitive ranking and engineering criteria for selecting top educational technology software partners, LMS developers, and AI-native learning platform teams in 2026.",
+  },
   "blog-detail": {
-    title: "The Future of AI in Modern Businesses",
+    title: "The Future of AI in Modern Businesses: Engineering Agentic Systems",
+    category: "Insights / AI SaaS",
     image:
       "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
-    date: "June 6, 2026",
-    readTime: "15 min read",
-    author: "Written by User name",
-    content: "Artificial Intelligence (AI) is no longer a futuristic concept — it has become a true driver of innovation and business growth. Organizations across the globe are integrating AI into their core operations to improve decision-making, enhance customer experiences, and unlock new opportunities.",
+    date: "September 21, 2026",
+    readTime: "15-18 Min Read",
+    author: "SoftMind Editorial Team",
+    excerpt:
+      "Artificial Intelligence is no longer just predictive — it has become agentic and autonomous. Learn how forward-thinking enterprises are integrating AI workflows into production.",
   },
   "reshaping-real-estate": {
-    title: "How Technology is Reshaping Real Estate",
+    title: "How Technology is Reshaping Real Estate & PropTech in 2026",
+    category: "Insights / PropTech",
     image:
       "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80",
-    date: "June 8, 2026",
-    readTime: "12 min read",
-    author: "Written by User name",
-    content: "From smart property management to digital tenant experiences, technology is driving unprecedented efficiency in real estate operations.",
+    date: "September 18, 2026",
+    readTime: "12-14 Min Read",
+    author: "SoftMind Editorial Team",
+    excerpt:
+      "From smart property management to digital tenant experiences, discover how modern cloud platforms are driving efficiency in real estate.",
   },
 };
 
+const defaultTocItems = [
+  {
+    id: "what-counts-as-an-edtech-technology-partner",
+    title: "What Counts As An EdTech Technology Partner",
+  },
+  {
+    id: "how-we-scored-these-education-technology-partners",
+    title: "How We Scored These Education Technology Partners",
+  },
+  {
+    id: "the-10-best-edtech-partners-in-2026",
+    title: "The 10 Best EdTech Partners In 2026",
+    subItems: [
+      {
+        id: "1-softmind-solutions-ai-native-edtech-engineering",
+        title: "SoftMind Solutions — AI-Native EdTech & Cloud Platforms",
+      },
+      {
+        id: "2-enterprise-scale-cloud-architectures",
+        title: "Enterprise Scale Cloud & Open edX Integrations",
+      },
+    ],
+  },
+  {
+    id: "which-edtech-partner-fits-what-you-are-building",
+    title: "Which EdTech Partner Fits What You Are Building",
+  },
+  {
+    id: "how-to-evaluate-an-edtech-partner-that-is-not-on-this-list",
+    title: "How To Evaluate An EdTech Partner That Is Not On This List",
+  },
+  {
+    id: "talk-to-us-about-your-build",
+    title: "Talk To Us About Your Build",
+  },
+];
+
+// Helper to extract TOC items dynamically from Sanity body blocks
+function extractTocFromSanityBody(body) {
+  if (!body || !Array.isArray(body)) return null;
+
+  const items = [];
+  let currentParent = null;
+
+  body.forEach((block) => {
+    if (
+      block._type === "block" &&
+      (block.style === "h2" || block.style === "h3")
+    ) {
+      const text = (block.children || [])
+        .map((c) => c.text)
+        .join("")
+        .trim();
+      if (!text) return;
+
+      const id = slugify(text);
+
+      if (block.style === "h2") {
+        currentParent = { id, title: text, subItems: [] };
+        items.push(currentParent);
+      } else if (block.style === "h3") {
+        const subItem = { id, title: text };
+        if (currentParent) {
+          currentParent.subItems.push(subItem);
+        } else {
+          items.push(subItem);
+        }
+      }
+    }
+  });
+
+  if (items.length > 0) {
+    items.push({
+      id: "talk-to-us-about-your-build",
+      title: "Talk To Us About Your Build",
+    });
+    return items;
+  }
+
+  return null;
+}
+
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
-  const slug = resolvedParams?.slug || "blog-detail";
-  
+  const slug = resolvedParams?.slug || "top-edtech-technology-partners-2026";
+
   let sanityPost = null;
   try {
     sanityPost = await safeSanityFetch(postBySlugQuery, { slug });
@@ -39,9 +145,26 @@ export async function generateMetadata({ params }) {
     console.warn("Sanity generateMetadata warning:", err.message);
   }
 
-  const title = sanityPost?.seoTitle || sanityPost?.title || fallbackBlogPosts[slug]?.title || "Blog Post | SoftMind Solutions";
-  const description = sanityPost?.seoDescription || sanityPost?.excerpt || "Read expert perspectives and practical tips on AI and software development.";
-  const image = sanityPost?.ogImage ? urlFor(sanityPost.ogImage)?.url() : sanityPost?.coverImage ? urlFor(sanityPost.coverImage)?.url() : fallbackBlogPosts[slug]?.image;
+  const fallback =
+    fallbackBlogPosts[slug] ||
+    fallbackBlogPosts["top-edtech-technology-partners-2026"] ||
+    fallbackBlogPosts["blog-detail"];
+
+  const title =
+    sanityPost?.seoTitle ||
+    sanityPost?.title ||
+    fallback?.title ||
+    "Insights | SoftMind Solutions";
+  const description =
+    sanityPost?.seoDescription ||
+    sanityPost?.excerpt ||
+    fallback?.excerpt ||
+    "Read expert perspectives and engineering analysis.";
+  const image = sanityPost?.ogImage
+    ? urlFor(sanityPost.ogImage)?.url()
+    : sanityPost?.coverImage
+      ? urlFor(sanityPost.coverImage)?.url()
+      : fallback?.image;
   const url = `https://softmindsol.com/blog/${slug}`;
 
   return {
@@ -68,141 +191,177 @@ export async function generateMetadata({ params }) {
 
 export default async function BlogDetail({ params }) {
   const resolvedParams = await params;
-  const slug = resolvedParams?.slug || "blog-detail";
+  const slug = resolvedParams?.slug || "top-edtech-technology-partners-2026";
 
   let sanityPost = null;
+  let allSanityPosts = [];
   try {
-    sanityPost = await safeSanityFetch(postBySlugQuery, { slug });
+    const [fetchedPost, fetchedAll] = await Promise.all([
+      safeSanityFetch(postBySlugQuery, { slug }),
+      safeSanityFetch(postsQuery),
+    ]);
+    sanityPost = fetchedPost;
+    if (Array.isArray(fetchedAll)) {
+      allSanityPosts = fetchedAll;
+    }
   } catch (err) {
-    console.warn("Sanity post fetch warning:", err.message);
+    console.warn("Sanity fetch warning:", err.message);
   }
 
-  const fallback = fallbackBlogPosts[slug] || fallbackBlogPosts["blog-detail"];
+  const fallback =
+    fallbackBlogPosts[slug] ||
+    fallbackBlogPosts["top-edtech-technology-partners-2026"] ||
+    fallbackBlogPosts["blog-detail"];
 
   const title = sanityPost?.title || fallback.title;
-  const image = sanityPost?.coverImage ? urlFor(sanityPost.coverImage)?.url() : fallback.image;
-  const date = sanityPost?.publishedAt ? new Date(sanityPost.publishedAt).toLocaleDateString() : fallback.date;
-  const author = "SoftMind Solutions";
-  const readTime = "10 min read";
+  const image = sanityPost?.coverImage
+    ? urlFor(sanityPost.coverImage)?.url()
+    : fallback.image;
+  const date = sanityPost?.publishedAt
+    ? new Date(sanityPost.publishedAt).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : fallback.date;
+  const author = "SoftMind Editorial Team";
+  const readTime = fallback.readTime || "19-20 Min Read";
+  const category = fallback.category || "Insights / Blogs";
 
   const plainTextContent = sanityPost?.body
     ? portableTextToPlainText(sanityPost.body)
-    : fallback.content;
+    : fallback.excerpt || "";
+
+  // Dynamic TOC or fallback
+  const tocItems =
+    extractTocFromSanityBody(sanityPost?.body) || defaultTocItems;
+
+  // Format related posts
+  const relatedPosts = allSanityPosts
+    .filter((p) => p.slug !== slug)
+    .slice(0, 3)
+    .map((p) => ({
+      title: p.title,
+      slug: p.slug,
+      image: urlFor(p.coverImage)?.url(),
+      date: p.publishedAt
+        ? new Date(p.publishedAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })
+        : "Recent",
+      readTime: "8 min read",
+      excerpt: p.excerpt,
+      category: p.tags?.[0] || "Insights",
+    }));
+
+  const finalRelatedPosts =
+    relatedPosts.length > 0
+      ? relatedPosts
+      : [
+          {
+            title: "How Technology is Reshaping Real Estate & PropTech in 2026",
+            slug: "reshaping-real-estate",
+            image:
+              "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80",
+            date: "September 18, 2026",
+            readTime: "12 min read",
+            excerpt:
+              "From smart property management to digital tenant experiences.",
+            category: "PropTech",
+          },
+          {
+            title:
+              "The Future of AI in Modern Businesses: Engineering Agentic Systems",
+            slug: "blog-detail",
+            image:
+              "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80",
+            date: "September 12, 2026",
+            readTime: "15 min read",
+            excerpt:
+              "How forward-thinking enterprises are integrating AI workflows.",
+            category: "AI SaaS",
+          },
+          {
+            title: "Top 10 Education Technology Partners in 2026",
+            slug: "top-edtech-technology-partners-2026",
+            image:
+              "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80",
+            date: "September 21, 2026",
+            readTime: "20 min read",
+            excerpt:
+              "A comprehensive analysis of leading software engineering partners.",
+            category: "EdTech",
+          },
+        ].filter((p) => p.slug !== slug);
 
   const currentUrl = `https://softmindsol.com/blog/${slug}`;
 
   return (
-    <main className="w-full flex flex-col bg-white text-[#161616] font-jakarta">
-      <ArticleJsonLd post={{ title, excerpt: sanityPost?.excerpt, coverImage: image, publishedAt: sanityPost?.publishedAt, author }} url={currentUrl} />
+    <main className="w-full bg-white text-navy font-jakarta selection:bg-green">
+      <ArticleJsonLd
+        post={{
+          title,
+          excerpt: sanityPost?.excerpt || fallback.excerpt,
+          coverImage: image,
+          publishedAt: sanityPost?.publishedAt || new Date().toISOString(),
+          author,
+        }}
+        url={currentUrl}
+      />
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: "https://softmindsol.com" },
-          { name: "Blog", url: "https://softmindsol.com/blog" },
+          { name: "Blogs", url: "https://softmindsol.com/blog" },
           { name: title, url: currentUrl },
         ]}
       />
 
-      {/* Top Banner Section */}
-      <section className="w-full relative px-4 md:px-8 pt-12 pb-20 max-w-[1400px] mx-auto">
-        <div className="w-full mb-6">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-gray-500 hover:text-green transition-colors font-medium"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Blogs
-          </Link>
-        </div>
-
-        {/* Hero Image */}
-        <div className="w-full h-[300px] md:h-[500px] relative rounded-2xl overflow-hidden mb-[-60px] z-0 shadow-lg">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover"
+      {/* Main Container */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 pt-8 pb-20">
+        <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start justify-between">
+          {/* ── LEFT COLUMN: Sticky Table of Contents & Summarize with AI ── */}
+          <TableOfContents
+            items={tocItems}
+            fullContent={`${title}\n\n${plainTextContent}`}
           />
-        </div>
 
-        {/* Title Box */}
-        <div className="relative z-10 w-[95%] md:w-[85%] mx-auto bg-[#F4F4F5] rounded-[20px] p-8 md:p-12 shadow-md flex flex-col items-center text-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-8 max-w-[800px] leading-tight text-navy">
-            {title}
-          </h1>
+          {/* ── CENTER COLUMN: Header, Hero, Body, Reactions, Related Posts ── */}
+          <div className="flex-1 min-w-0 max-w-[840px] w-full">
+            {/* Header meta block */}
+            <BlogHeader title={title} category={category} />
 
-          <div className="flex flex-col sm:flex-row items-center justify-between w-full mt-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center border-2 border-white shadow-sm">
-                <svg
-                  className="w-6 h-6 text-gray-500"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="font-semibold text-[15px]">{author}</p>
-                <p className="text-sm text-gray-500">Author</p>
-              </div>
-            </div>
-            <div className="mt-4 sm:mt-0 text-gray-500 font-medium">
-              <span>{date}</span> <span className="mx-2">•</span>{" "}
-              <span>{readTime}</span>
-            </div>
+            {/* Author row */}
+            <AuthorMeta
+              author={author}
+              publishedDate={date}
+              readTime={readTime}
+            />
+
+            {/* Hero image */}
+            <BlogHero image={image} title={title} />
+
+            {/* Article body content */}
+            <ArticleBody
+              body={sanityPost?.body}
+              plainTextFallback={plainTextContent}
+            />
+
+            {/* Reaction Section */}
+            <ReactionBar slug={slug} />
+
+            {/* Talk To Us / Footer CTA */}
+            {/* <BlogFooterCta /> */}
+
+            {/* Related Posts Section */}
+            <RelatedPosts posts={finalRelatedPosts} />
           </div>
-        </div>
-      </section>
 
-      {/* Main Content Section */}
-      <section className="w-full bg-[#F9FAFB] py-16 px-4 md:px-8">
-        <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-12">
-          {/* Sticky Social Sidebar */}
-          <aside className="w-full lg:w-[80px] shrink-0">
-            <div className="sticky top-32 flex lg:flex-col gap-4 items-center justify-center lg:justify-start">
-              <a
-                href="#"
-                className="w-10 h-10 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#0B63BD] hover:text-white hover:border-[#0B63BD] transition-all duration-300 shadow-sm"
-              >
-                <FaLinkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#0862F7] hover:text-white hover:border-[#0862F7] transition-all duration-300 shadow-sm"
-              >
-                <FaFacebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300 shadow-sm"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
-              <button className="w-10 h-10 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#F67503] hover:text-white hover:border-[#F67503] transition-all duration-300 shadow-sm">
-                <LinkIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </aside>
-
-          {/* Article Content */}
-          <article className="flex-1 max-w-[850px] text-[17px] leading-[1.8] text-gray-700 font-medium">
-            <div className="mb-8">
-              <SummarizeButton 
-                content={`${title}\n\n${plainTextContent}`} 
-                theme="light" 
-              />
-            </div>
-            
-            <div className="space-y-6">
-              {plainTextContent.split("\n\n").map((paragraph, idx) => (
-                <p key={idx} className="mb-4">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </article>
+          {/* ── RIGHT COLUMN: Solutions / Services Tabs & Newsletter ── */}
+          <BlogSidebar />
         </div>
-      </section>
+      </div>
     </main>
   );
 }

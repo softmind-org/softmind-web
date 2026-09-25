@@ -165,6 +165,9 @@ export async function generateMetadata({ params }) {
     : sanityPost?.coverImage
       ? urlFor(sanityPost.coverImage)?.url()
       : fallback?.image;
+  // Always ship an og:image — without one, social scrapers pick an arbitrary
+  // image off the page (partner logos and the like).
+  const ogImage = image || "https://softmindsol.com/og-image.png";
   const url = `https://softmindsol.com/blog/${slug}`;
 
   return {
@@ -177,14 +180,15 @@ export async function generateMetadata({ params }) {
       title,
       description,
       url,
+      siteName: "SoftMind Solutions",
       type: "article",
-      images: image ? [{ url: image }] : [],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: image ? [image] : [],
+      images: [ogImage],
     },
   };
 }

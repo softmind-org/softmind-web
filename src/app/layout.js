@@ -7,12 +7,48 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://softmindsol.com";
+const siteTitle =
+  "SoftMind Solutions | AI SaaS & Custom Software Development Company";
+const siteDescription =
+  "Expert AI SaaS development for startups and enterprises. Build secure, scalable AI applications faster. Get a free consultation today.";
+
 export const metadata = {
-  title: "SoftMind Solutions | AI SaaS & Custom Software Development Company",
-  description:
-    "Expert AI SaaS development for startups and enterprises. Build secure, scalable AI applications faster. Get a free consultation today.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
   icons: {
-    icon: "/images/favicon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: "SoftMind Solutions",
+    title: siteTitle,
+    description: siteDescription,
+    locale: "en_US",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SoftMind Solutions — AI SaaS & Custom Software Development Company",
+        type: "image/png",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/og-image.png"],
   },
 };
 

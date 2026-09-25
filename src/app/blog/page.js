@@ -15,11 +15,21 @@ export const metadata = {
     url: "https://softmindsol.com/blog",
     siteName: "SoftMind Solutions",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SoftMind Solutions — AI SaaS & Custom Software Development Company",
+        type: "image/png",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Insights & Industry Trends | SoftMind Solutions Blog",
     description: "Explore expert perspectives and AI industry trends.",
+    images: ["/og-image.png"],
   },
 };
 

@@ -30,7 +30,7 @@ export function ArticleJsonLd({ post, url }) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt || post.seoDescription || post.title,
-    image: post.coverImage || post.ogImage || "https://softmindsol.com/images/default-blog.jpg",
+    image: post.coverImage || post.ogImage || "https://softmindsol.com/og-image.png",
     datePublished: post.publishedAt || new Date().toISOString(),
     author: {
       "@type": "Person",

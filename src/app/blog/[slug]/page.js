@@ -319,7 +319,7 @@ export default async function BlogDetail({ params }) {
       />
 
       {/* Main Container */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 pt-8 pb-20">
+      <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10 pt-8 pb-20">
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start justify-between">
           {/* ── LEFT COLUMN: Sticky Table of Contents & Summarize with AI ── */}
           <TableOfContents
@@ -328,7 +328,7 @@ export default async function BlogDetail({ params }) {
           />
 
           {/* ── CENTER COLUMN: Header, Hero, Body, Reactions, Related Posts ── */}
-          <div className="flex-1 min-w-0 max-w-[840px] w-full">
+          <div className="flex-1 min-w-0 max-w-210 w-full">
             {/* Header meta block */}
             <BlogHeader title={title} category={category} />
 

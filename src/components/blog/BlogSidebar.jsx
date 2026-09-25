@@ -44,7 +44,7 @@ export default function BlogSidebar() {
     activeTab === "solutions" ? SOLUTIONS_LINKS : SERVICES_LINKS;
 
   return (
-    <aside className="w-full lg:w-[260px] xl:w-[290px] shrink-0 font-jakarta space-y-8">
+    <aside className="w-full lg:w-[260px] xl:w-[290px] shrink-0 font-jakarta space-y-8 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:pl-1">
       {/* ── Tabbed Navigation Widget (Solutions / Services) ── */}
       <div className="bg-[#F8FAFC] border border-gray-200/80 rounded-2xl p-5 shadow-xs">
         {/* Tab Buttons */}
@@ -90,7 +90,7 @@ export default function BlogSidebar() {
       </div>
 
       {/* ── Newsletter Card (Matching reference design) ── */}
-      <div className="bg-white border border-gray-200/90 rounded-2xl p-6 shadow-xs">
+      <div className="bg-white border border-gray-200/90 rounded-2xl p-5 shadow-xs">
         <h3 className="text-lg font-bold text-navy tracking-tight mb-2">
           Newsletter
         </h3>

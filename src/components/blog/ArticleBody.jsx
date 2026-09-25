@@ -360,7 +360,7 @@ export default function ArticleBody({ body, plainTextFallback = "" }) {
       {/* Pull Quote */}
       <blockquote className="my-8 relative rounded-2xl bg-gradient-to-r from-emerald-50/70 to-teal-50/40 p-6 md:p-8 border-y border-r border-l-4 border-green text-navy font-medium shadow-xs">
         <Quote className="w-8 h-8 text-green/40 mb-2" />
-        <div className="text-lg md:text-xl italic font-serif leading-relaxed text-navy">
+        <div className="text-lg md:text-xl font-serif leading-relaxed text-navy">
           &ldquo;SoftMind&apos;s team delivered our adaptive assessment engine
           40% faster than internal projections, enabling us to support over
           120,000 active students seamlessly.&rdquo;

@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 
 export default function BlogHeader({ title, category = "Insights / Blogs" }) {
   return (
-    <header className="w-full mb-6">
+    <header className="w-full my-6">
       {/* Breadcrumb Navigation */}
       <nav
         aria-label="Breadcrumb"
@@ -20,7 +20,7 @@ export default function BlogHeader({ title, category = "Insights / Blogs" }) {
       </nav>
 
       {/* Main H1 Title */}
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-bold text-navy font-jakarta leading-[1.2] tracking-tight">
+      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy font-jakarta leading-[1.2] tracking-tight">
         {title}
       </h1>
     </header>

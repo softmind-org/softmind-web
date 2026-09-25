@@ -141,8 +141,8 @@ export default function TableOfContents({ items = [], fullContent = "" }) {
   return (
     <>
       {/* Desktop Sticky Left Sidebar (matching Arbisoft reference) */}
-      <aside className="hidden lg:block w-[240px] xl:w-[270px] shrink-0 font-jakarta">
-        <div className="sticky top-28 space-y-6">
+      <aside className="hidden lg:block lg:self-stretch w-[240px] xl:w-[270px] shrink-0 font-jakarta">
+        <div className="sticky top-28 space-y-6 max-h-[calc(100vh-8rem)] overflow-y-auto pr-1">
           {/* Summarize with AI button placed prominent at the top */}
           <div className="w-full">
             <SummarizeButton content={fullContent} theme="light" />

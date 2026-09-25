@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function AuthorMeta({
   author = "SoftMind Editorial Team",
   authorRole = "AI & Technology Practice",
-  authorImage = null,
+  authorImage = "/images/favicon.svg",
   publishedDate = "September 21, 2026",
   readTime = "19-20 Min Read",
 }) {
@@ -14,7 +14,7 @@ export default function AuthorMeta({
       {/* Left: Author Avatar & Name & Date */}
       <div className="flex items-center gap-3.5">
         {/* Author Avatar */}
-        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-tr from-[#00235A] to-[#0CBF83] p-[2px] shrink-0 shadow-sm">
+        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 border border-gray-200 p-0.5 shrink-0 shadow-sm">
           {authorImage ? (
             <div className="w-full h-full rounded-full overflow-hidden relative">
               <Image

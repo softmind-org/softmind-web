@@ -46,7 +46,7 @@ export default function SummarizeButton({ content, theme = "dark" }) {
   const isDark = theme === "dark";
 
   return (
-    <div className="w-full flex flex-col gap-3 mt-4" onClick={(e) => e.stopPropagation()}>
+    <div className="w-full flex flex-col gap-3 mt-2" onClick={(e) => e.stopPropagation()}>
       <Button
         onClick={handleSummarize}
         disabled={loading}

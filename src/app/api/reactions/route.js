@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/backend/supabase/admin";
 
 // In-memory fallback cache to store real counts if database is temporarily unreachable
-const fallbackReactions = {};
+const fallbackReactions = new Map();
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -58,6 +58,11 @@ export async function POST(request) {
       );
     }
 
+    const allowedReactionTypes = ["not_useful", "okay", "helpful", "very_helpful"];
+    if (!allowedReactionTypes.includes(reactionType)) {
+      return NextResponse.json({ error: "Invalid reactionType" }, { status: 400 });
+    }
+
     const step = delta === -1 ? -1 : 1;
 
     try {
@@ -109,23 +114,25 @@ export async function POST(request) {
     }
 
     // In-memory fallback
-    if (!fallbackReactions[slug]) {
-      fallbackReactions[slug] = {
+    let fallbackForSlug = fallbackReactions.get(slug);
+    if (!fallbackForSlug) {
+      fallbackForSlug = {
         not_useful: 0,
         okay: 0,
         helpful: 0,
         very_helpful: 0,
       };
+      fallbackReactions.set(slug, fallbackForSlug);
     }
 
-    fallbackReactions[slug][reactionType] = Math.max(
+    fallbackForSlug[reactionType] = Math.max(
       0,
-      (fallbackReactions[slug][reactionType] || 0) + step
+      (fallbackForSlug[reactionType] || 0) + step
     );
 
     return NextResponse.json({
       success: true,
-      count: fallbackReactions[slug][reactionType],
+      count: fallbackForSlug[reactionType],
     });
   } catch (error) {
     return NextResponse.json(
